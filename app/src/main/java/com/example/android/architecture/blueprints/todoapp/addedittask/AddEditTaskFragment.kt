@@ -16,16 +16,15 @@
 package com.example.android.architecture.blueprints.todoapp.addedittask
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.android.architecture.blueprints.todoapp.EventObserver
 import com.example.android.architecture.blueprints.todoapp.R
-import com.example.android.architecture.blueprints.todoapp.databinding.AddtaskFragBinding
+import com.example.android.architecture.blueprints.todoapp.databinding.AddEditTaskFragBinding
+import com.example.android.architecture.blueprints.todoapp.databinding.AddEditTaskFragBindingImpl
 import com.example.android.architecture.blueprints.todoapp.tasks.ADD_EDIT_RESULT_OK
 import com.example.android.architecture.blueprints.todoapp.util.getViewModelFactory
 import com.example.android.architecture.blueprints.todoapp.util.setupRefreshLayout
@@ -37,22 +36,23 @@ import com.google.android.material.snackbar.Snackbar
  */
 class AddEditTaskFragment : Fragment() {
 
-    private lateinit var viewDataBinding: AddtaskFragBinding
+    private lateinit var viewDataBinding: AddEditTaskFragBinding
 
     private val args: AddEditTaskFragmentArgs by navArgs()
 
     private val viewModel by viewModels<AddEditTaskViewModel> { getViewModelFactory() }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.addtask_frag, container, false)
-        viewDataBinding = AddtaskFragBinding.bind(root).apply {
+        val root = inflater.inflate(R.layout.add_edit_task_frag, container, false)
+        viewDataBinding = AddEditTaskFragBinding.bind(root).apply {
             this.viewmodel = viewModel
         }
         // Set the lifecycle owner to the lifecycle of the view
         viewDataBinding.lifecycleOwner = this.viewLifecycleOwner
+        setHasOptionsMenu(true)
         return viewDataBinding.root
     }
 
@@ -71,8 +71,24 @@ class AddEditTaskFragment : Fragment() {
     private fun setupNavigation() {
         viewModel.taskUpdatedEvent.observe(this, EventObserver {
             val action = AddEditTaskFragmentDirections
-                .actionAddEditTaskFragmentToTasksFragment(ADD_EDIT_RESULT_OK)
+                    .actionAddEditTaskFragmentToTasksFragment(ADD_EDIT_RESULT_OK)
             findNavController().navigate(action)
         })
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_delete -> {
+                viewModel.deleteTask()
+                true
+            }
+            else -> false
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        if (args.taskId != null) {
+            inflater.inflate(R.menu.edit_task_fragment_menu, menu)
+        }
     }
 }

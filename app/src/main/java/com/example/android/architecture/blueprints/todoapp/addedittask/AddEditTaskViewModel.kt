@@ -24,6 +24,7 @@ import com.example.android.architecture.blueprints.todoapp.Event
 import com.example.android.architecture.blueprints.todoapp.R
 import com.example.android.architecture.blueprints.todoapp.data.Result.Success
 import com.example.android.architecture.blueprints.todoapp.data.Task
+import com.example.android.architecture.blueprints.todoapp.domain.DeleteTaskUseCase
 import com.example.android.architecture.blueprints.todoapp.domain.GetTaskUseCase
 import com.example.android.architecture.blueprints.todoapp.domain.SaveTaskUseCase
 import kotlinx.coroutines.launch
@@ -33,8 +34,9 @@ import java.util.*
  * ViewModel for the Add/Edit screen.
  */
 class AddEditTaskViewModel(
-    private val getTaskUseCase: GetTaskUseCase,
-    private val saveUseCase: SaveTaskUseCase
+        private val deleteTaskUseCase: DeleteTaskUseCase,
+        private val getTaskUseCase: GetTaskUseCase,
+        private val saveUseCase: SaveTaskUseCase
 ) : ViewModel() {
 
     val date = MutableLiveData<String>()
@@ -131,6 +133,13 @@ class AddEditTaskViewModel(
         }
         viewModelScope.launch {
             saveUseCase(task)
+            _taskUpdatedEvent.value = Event(Unit)
+        }
+    }
+
+    fun deleteTask() = viewModelScope.launch {
+        taskId?.let {
+            deleteTaskUseCase(it)
             _taskUpdatedEvent.value = Event(Unit)
         }
     }

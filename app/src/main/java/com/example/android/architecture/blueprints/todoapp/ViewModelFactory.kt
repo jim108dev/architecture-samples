@@ -31,23 +31,24 @@ import com.example.android.architecture.blueprints.todoapp.tasks.TasksViewModel
  */
 @Suppress("UNCHECKED_CAST")
 class ViewModelFactory constructor(
-    private val tasksRepository: TasksRepository
+        private val tasksRepository: TasksRepository
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>) =
             with(modelClass) {
                 when {
                     isAssignableFrom(StatisticsViewModel::class.java) ->
                         StatisticsViewModel(
-                            GetTasksUseCase(tasksRepository)
+                                GetTasksUseCase(tasksRepository)
                         )
                     isAssignableFrom(AddEditTaskViewModel::class.java) ->
                         AddEditTaskViewModel(
-                            GetTaskUseCase(tasksRepository),
-                            SaveTaskUseCase(tasksRepository)
+                                DeleteTaskUseCase(tasksRepository),
+                                GetTaskUseCase(tasksRepository),
+                                SaveTaskUseCase(tasksRepository)
                         )
                     isAssignableFrom(TasksViewModel::class.java) ->
                         TasksViewModel(
-                            GetTasksUseCase(tasksRepository)
+                                GetTasksUseCase(tasksRepository)
                         )
                     else ->
                         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
