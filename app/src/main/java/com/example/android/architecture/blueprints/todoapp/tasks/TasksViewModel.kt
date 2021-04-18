@@ -28,6 +28,7 @@ import com.example.android.architecture.blueprints.todoapp.data.Result.Success
 import com.example.android.architecture.blueprints.todoapp.data.Task
 import com.example.android.architecture.blueprints.todoapp.data.source.TasksDataSource
 import com.example.android.architecture.blueprints.todoapp.domain.GetTasksUseCase
+import com.example.android.architecture.blueprints.todoapp.util.DateUtil
 import com.example.android.architecture.blueprints.todoapp.util.wrapEspressoIdlingResource
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -177,11 +178,6 @@ class TasksViewModel(
 
     fun formatAmount(amount: Long):String {
         return amount.toString()
-    }
-
-    fun formatDate(date: Date) : String {
-        val format = SimpleDateFormat("dd/MM/yyy")
-        return format.format(date)
     }
 
     fun refresh() {

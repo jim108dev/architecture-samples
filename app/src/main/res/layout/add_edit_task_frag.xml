@@ -56,8 +56,9 @@
                     android:background="@null"
                     android:ems="10"
                     android:hint="@string/date_hint"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
                     android:text="@={viewmodel.date}"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+                    />
 
                 <EditText
                     android:id="@+id/add_task_title_edit_text"
@@ -73,13 +74,15 @@
                 <EditText
                     android:id="@+id/add_position_amount_edit_text"
                     android:layout_width="0dp"
+                    android:gravity="end"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
                     android:hint="@string/amount_hint"
                     android:imeOptions="flagNoExtractUi"
                     android:inputType="numberSigned"
-                    android:text="@={viewmodel.amount}" />
+                    android:text="@={viewmodel.amount}"
+                     />
 
             </LinearLayout>
 

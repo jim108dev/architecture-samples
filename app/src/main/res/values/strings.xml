@@ -15,7 +15,7 @@
   -->
 
 <resources>
-    <string name="app_name">Todo</string>
+    <string name="app_name">Journal</string>
     <string name="add_task">New Task</string>
     <string name="edit_task">Edit Task</string>
     <string name="task_marked_complete">Task marked complete</string>
@@ -23,13 +23,13 @@
     <string name="loading_tasks_error">Error while loading tasks</string>
     <string name="completed_tasks_cleared">Completed tasks cleared</string>
     <string name="menu_filter">Filter</string>
-    <string name="menu_clear">Clear completed</string>
+    <string name="menu_delete_all">Delete all</string>
     <string name="menu_delete_task">Delete task</string>
     <string name="navigation_view_header_title">Simple Money Journal</string>
     <string name="date_hint">Date</string>
     <string name="title_hint">Title</string>
     <string name="amount_hint">Amount</string>
-    <string name="empty_task_message">Tasks cannot be empty</string>
+    <string name="empty_task_message">All values are mandatory</string>
     <string name="successfully_saved_task_message">Task saved</string>
     <string name="list_title">Task List</string>
     <string name="statistics_title">Statistics</string>
@@ -41,12 +41,12 @@
 
     <string-array name="list_tasks_array">
         <item>@string/nav_all</item>
-        <item>@string/nav_active</item>
-        <item>@string/nav_completed</item>
+        <item>@string/nav_debit</item>
+        <item>@string/nav_credit</item>
     </string-array>
     <string name="nav_all">All</string>
-    <string name="nav_active">Active</string>
-    <string name="nav_completed">Completed</string>
+    <string name="nav_debit">Debit</string>
+    <string name="nav_credit">Credit</string>
     <string name="label_all">All Tasks</string>
     <string name="label_active">Active Tasks</string>
     <string name="label_completed">Completed Tasks</string>

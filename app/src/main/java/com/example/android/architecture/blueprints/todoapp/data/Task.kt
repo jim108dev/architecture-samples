@@ -24,8 +24,8 @@ import java.util.*
 
 @Entity(tableName = "tasks")
 data class Task @JvmOverloads constructor(
-        @ColumnInfo(name = "date") var date: String = "",
+        @ColumnInfo(name = "date") var date: Date = Date(),
         @ColumnInfo(name = "title") var title: String = "",
-        @ColumnInfo(name = "amount") var amount: String = "",
+        @ColumnInfo(name = "amount") var amount: Int = 0,
         @PrimaryKey @ColumnInfo(name = "entryid") var id: String = UUID.randomUUID().toString()
 ) {}

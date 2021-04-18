@@ -47,7 +47,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginBottom="0dp"
             android:layout_weight="1"
-            android:text="@{task.date}"
+            app:date="@{task.date}"
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
         <TextView
@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            android:text="@{task.amount}"
+            app:int="@{task.amount}"
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
     </LinearLayout>
 </layout>

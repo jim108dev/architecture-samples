@@ -27,13 +27,13 @@ class GetTasksUseCase(
                 val tasks = tasksResult.data
 
                 val tasksToShow = mutableListOf<Task>()
-                // We filter the tasks based on the requestType
+
                 for (task in tasks) {
                     when (currentFiltering) {
-                        DEBIT -> if (!task.amount.startsWith("-")) {
+                        DEBIT -> if (task.amount >= 0) {
                             tasksToShow.add(task)
                         }
-                        CREDIT -> if (task.amount.startsWith("-")) {
+                        CREDIT -> if (task.amount < 0) {
                             tasksToShow.add(task)
                         }
                         else -> NotImplementedError()

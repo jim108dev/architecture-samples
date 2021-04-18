@@ -27,6 +27,7 @@ import com.example.android.architecture.blueprints.todoapp.data.Task
 import com.example.android.architecture.blueprints.todoapp.domain.DeleteTaskUseCase
 import com.example.android.architecture.blueprints.todoapp.domain.GetTaskUseCase
 import com.example.android.architecture.blueprints.todoapp.domain.SaveTaskUseCase
+import com.example.android.architecture.blueprints.todoapp.util.DateUtil
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -91,9 +92,9 @@ class AddEditTaskViewModel(
     }
 
     private fun onTaskLoaded(task: Task) {
-        date.value = task.date
+        date.value = DateUtil.convertDateToString(task.date)
         title.value = task.title
-        amount.value = task.amount
+        amount.value = task.amount.toString()
         _dataLoading.value = false
         isDataLoaded = true
     }
@@ -104,15 +105,17 @@ class AddEditTaskViewModel(
 
     // Called when clicking on fab.
     fun saveTask() {
-        val currentDate = date.value
+        val currentDateS = date.value
         val currentTitle = title.value
-        val currentAmount = amount.value
+        val currentAmountS= amount.value
 
-        if (currentDate == null || currentTitle == null || currentAmount == null) {
+        if (currentDateS == null || currentTitle == null || currentAmountS== null) {
             _snackbarText.value = Event(R.string.empty_task_message)
             return
         }
 
+        val currentDate = DateUtil.convertStringToDate(currentDateS)
+        val currentAmount = currentAmountS.toInt()
         val currentTaskId = taskId
         if (isNewTask || currentTaskId == null) {
             createTask(Task(currentDate,currentTitle, currentAmount))

@@ -15,11 +15,12 @@
  */
 package com.example.android.architecture.blueprints.todoapp.tasks
 
-import android.graphics.Paint
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.architecture.blueprints.todoapp.data.Task
+import com.example.android.architecture.blueprints.todoapp.util.DateUtil
+import java.util.*
 
 /**
  * [BindingAdapter]s for the [Task]s list.
@@ -28,3 +29,15 @@ import com.example.android.architecture.blueprints.todoapp.data.Task
 fun setItems(listView: RecyclerView, items: List<Task>) {
     (listView.adapter as TasksAdapter).submitList(items)
 }
+
+@BindingAdapter("app:date")
+fun setDate(view: TextView, date: Date) {
+    view.text = DateUtil.convertDateToString(date)
+}
+
+@BindingAdapter("app:int")
+fun setInt(view: TextView, n: Int) {
+    view.text = n.toString()
+}
+
+

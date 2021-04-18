@@ -26,6 +26,7 @@ import com.example.android.architecture.blueprints.todoapp.EventObserver
 import com.example.android.architecture.blueprints.todoapp.R
 import com.example.android.architecture.blueprints.todoapp.databinding.AddEditTaskFragBinding
 import com.example.android.architecture.blueprints.todoapp.tasks.ADD_EDIT_RESULT_OK
+import com.example.android.architecture.blueprints.todoapp.util.DateUtil
 import com.example.android.architecture.blueprints.todoapp.util.getViewModelFactory
 import com.example.android.architecture.blueprints.todoapp.util.setupRefreshLayout
 import com.example.android.architecture.blueprints.todoapp.util.setupSnackbar
@@ -69,8 +70,9 @@ class AddEditTaskFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        openPicker()
         add_position_date.setOnClickListener{
-            pickerListener()
+            openPicker()
         }
         super.onViewCreated(view, savedInstanceState)
     }
@@ -103,17 +105,15 @@ class AddEditTaskFragment : Fragment() {
         }
     }
 
-    private fun pickerListener() {
+    private fun openPicker() {
         val myCalendar = Calendar.getInstance()
         val date = DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
 
             myCalendar.set(Calendar.YEAR, year)
             myCalendar.set(Calendar.MONTH, monthOfYear)
             myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-            val myFormat = "MM/dd"
-            val sdf = SimpleDateFormat(myFormat, Locale.ENGLISH)
 
-            add_position_date.text = sdf.format(myCalendar.time)
+            add_position_date.text = DateUtil.convertDateToString(myCalendar.time)
         }
 
         DatePickerDialog(context, date, myCalendar

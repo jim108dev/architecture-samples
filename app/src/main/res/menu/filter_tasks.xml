@@ -19,8 +19,8 @@
         android:title="@string/nav_all" />
     <item
         android:id="@+id/active"
-        android:title="@string/nav_active" />
+        android:title="@string/nav_debit" />
     <item
         android:id="@+id/completed"
-        android:title="@string/nav_completed" />
+        android:title="@string/nav_credit" />
 </menu>
