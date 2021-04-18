@@ -58,7 +58,7 @@ class TasksLocalDataSource internal constructor(
     }
 
     override suspend fun deleteAllTasks() = withContext(ioDispatcher) {
-        tasksDao.deleteTasks()
+        tasksDao.deleteAllTasks()
     }
 
     override suspend fun deleteTask(taskId: String) = withContext<Unit>(ioDispatcher) {

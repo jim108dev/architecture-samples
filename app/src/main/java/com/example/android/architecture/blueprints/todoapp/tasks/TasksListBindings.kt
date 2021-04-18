@@ -22,9 +22,7 @@ import com.example.android.architecture.blueprints.todoapp.data.Task
 import com.example.android.architecture.blueprints.todoapp.util.DateUtil
 import java.util.*
 
-/**
- * [BindingAdapter]s for the [Task]s list.
- */
+
 @BindingAdapter("app:items")
 fun setItems(listView: RecyclerView, items: List<Task>) {
     (listView.adapter as TasksAdapter).submitList(items)

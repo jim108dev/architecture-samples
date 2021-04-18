@@ -65,6 +65,10 @@ class TasksFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem) =
         when (item.itemId) {
+            R.id.menu_delete_all -> {
+                viewModel.deleteAllTasks()
+                true
+            }
             R.id.menu_filter -> {
                 showFilteringPopUpMenu()
                 true

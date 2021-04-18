@@ -32,7 +32,6 @@ import com.example.android.architecture.blueprints.todoapp.util.setupRefreshLayo
 import com.example.android.architecture.blueprints.todoapp.util.setupSnackbar
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.add_edit_task_frag.*
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -106,18 +105,18 @@ class AddEditTaskFragment : Fragment() {
     }
 
     private fun openPicker() {
-        val myCalendar = Calendar.getInstance()
+        val cal = Calendar.getInstance()
         val date = DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
 
-            myCalendar.set(Calendar.YEAR, year)
-            myCalendar.set(Calendar.MONTH, monthOfYear)
-            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            cal.set(Calendar.YEAR, year)
+            cal.set(Calendar.MONTH, monthOfYear)
+            cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
-            add_position_date.text = DateUtil.convertDateToString(myCalendar.time)
+            add_position_date.text = DateUtil.convertDateToString(cal.time)
         }
 
-        DatePickerDialog(context, date, myCalendar
-                .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                myCalendar.get(Calendar.DAY_OF_MONTH)).show()
+        DatePickerDialog(requireContext(), date, cal
+                .get(Calendar.YEAR), cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH)).show()
     }
 }

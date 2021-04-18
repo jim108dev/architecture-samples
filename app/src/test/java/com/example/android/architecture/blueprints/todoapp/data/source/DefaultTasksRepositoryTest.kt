@@ -272,11 +272,11 @@ class DefaultTasksRepositoryTest {
         tasksRepository.deleteAllTasks()
 
         // Fetch data again
-        val afterDeleteTasks = (tasksRepository.getTasks() as? Success)?.data
+        val afterdeleteAllTasks = (tasksRepository.getTasks() as? Success)?.data
 
         // Verify tasks are empty now
         assertThat(initialTasks).isNotEmpty()
-        assertThat(afterDeleteTasks).isEmpty()
+        assertThat(afterdeleteAllTasks).isEmpty()
     }
 
     @Test
@@ -287,11 +287,11 @@ class DefaultTasksRepositoryTest {
         tasksRepository.deleteTask(task1.id)
 
         // Fetch data again
-        val afterDeleteTasks = (tasksRepository.getTasks() as? Success)?.data
+        val afterdeleteAllTasks = (tasksRepository.getTasks() as? Success)?.data
 
         // Verify only one task was deleted
-        assertThat(afterDeleteTasks?.size).isEqualTo(initialTasks!!.size - 1)
-        assertThat(afterDeleteTasks).doesNotContain(task1)
+        assertThat(afterdeleteAllTasks?.size).isEqualTo(initialTasks!!.size - 1)
+        assertThat(afterdeleteAllTasks).doesNotContain(task1)
     }
 }
 

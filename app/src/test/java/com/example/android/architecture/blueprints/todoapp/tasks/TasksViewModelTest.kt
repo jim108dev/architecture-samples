@@ -24,10 +24,9 @@ import com.example.android.architecture.blueprints.todoapp.assertLiveDataEventTr
 import com.example.android.architecture.blueprints.todoapp.assertSnackbarMessage
 import com.example.android.architecture.blueprints.todoapp.data.Task
 import com.example.android.architecture.blueprints.todoapp.data.source.FakeRepository
-import com.example.android.architecture.blueprints.todoapp.domain.ActivateTaskUseCase
-import com.example.android.architecture.blueprints.todoapp.domain.ClearCompletedTasksUseCase
-import com.example.android.architecture.blueprints.todoapp.domain.CompleteTaskUseCase
+import com.example.android.architecture.blueprints.todoapp.domain.DeleteAllTasksUseCase
 import com.example.android.architecture.blueprints.todoapp.domain.GetTasksUseCase
+import com.example.android.architecture.blueprints.todoapp.util.DateUtil
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
@@ -60,16 +59,15 @@ class TasksViewModelTest {
     fun setupViewModel() {
         // We initialise the tasks to 3, with one active and two completed
         tasksRepository = FakeRepository()
-        val task1 = Task("Title1", "Description1")
-        val task2 = Task("Title2", "Description2", true)
-        val task3 = Task("Title3", "Description3", true)
+        val date = DateUtil.convertStringToDate("01/01/21")
+        val task1 = Task(date, "Title1", 10)
+        val task2 = Task(date,"Title2", 20)
+        val task3 = Task(date,"Title3", 30)
         tasksRepository.addTasks(task1, task2, task3)
 
         tasksViewModel = TasksViewModel(
-            GetTasksUseCase(tasksRepository),
-            ClearCompletedTasksUseCase(tasksRepository),
-            CompleteTaskUseCase(tasksRepository),
-            ActivateTaskUseCase(tasksRepository)
+                DeleteAllTasksUseCase(tasksRepository),
+                GetTasksUseCase(tasksRepository)
         )
     }
 
@@ -171,24 +169,20 @@ class TasksViewModelTest {
     @Test
     fun clearCompletedTasks_clearsTasks() = mainCoroutineRule.runBlockingTest {
         // When completed tasks are cleared
-        tasksViewModel.clearCompletedTasks()
+        tasksViewModel.deleteAllTasks()
 
         // Fetch tasks
         tasksViewModel.loadTasks(true)
 
         // Fetch tasks
         val allTasks = LiveDataTestUtil.getValue(tasksViewModel.items)
-        val completedTasks = allTasks.filter { it.isCompleted }
 
         // Verify there are no completed tasks left
-        assertThat(completedTasks).isEmpty()
-
-        // Verify active task is not cleared
-        assertThat(allTasks).hasSize(1)
+        assertThat(allTasks).isEmpty()
 
         // Verify snackbar is updated
         assertSnackbarMessage(
-            tasksViewModel.snackbarText, R.string.completed_tasks_cleared
+                tasksViewModel.snackbarText, R.string.delete_all_tasks
         )
     }
 
@@ -199,7 +193,7 @@ class TasksViewModelTest {
 
         // The snackbar is updated
         assertSnackbarMessage(
-            tasksViewModel.snackbarText, R.string.successfully_saved_task_message
+                tasksViewModel.snackbarText, R.string.successfully_saved_task_message
         )
     }
 
@@ -210,7 +204,7 @@ class TasksViewModelTest {
 
         // The snackbar is updated
         assertSnackbarMessage(
-            tasksViewModel.snackbarText, R.string.successfully_added_task_message
+                tasksViewModel.snackbarText, R.string.successfully_added_task_message
         )
     }
 
@@ -221,43 +215,7 @@ class TasksViewModelTest {
 
         // The snackbar is updated
         assertSnackbarMessage(
-            tasksViewModel.snackbarText, R.string.successfully_deleted_task_message
-        )
-    }
-
-    @Test
-    fun completeTask_dataAndSnackbarUpdated() {
-        // With a repository that has an active task
-        val task = Task("Title", "Description")
-        tasksRepository.addTasks(task)
-
-        // Complete task
-        tasksViewModel.completeTask(task, true)
-
-        // Verify the task is completed
-        assertThat(tasksRepository.tasksServiceData[task.id]?.isCompleted).isTrue()
-
-        // The snackbar is updated
-        assertSnackbarMessage(
-            tasksViewModel.snackbarText, R.string.task_marked_complete
-        )
-    }
-
-    @Test
-    fun activateTask_dataAndSnackbarUpdated() {
-        // With a repository that has a completed task
-        val task = Task("Title", "Description", true)
-        tasksRepository.addTasks(task)
-
-        // Activate task
-        tasksViewModel.completeTask(task, false)
-
-        // Verify the task is active
-        assertThat(tasksRepository.tasksServiceData[task.id]?.isActive).isTrue()
-
-        // The snackbar is updated
-        assertSnackbarMessage(
-            tasksViewModel.snackbarText, R.string.task_marked_active
+                tasksViewModel.snackbarText, R.string.successfully_deleted_task_message
         )
     }
 

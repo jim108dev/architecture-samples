@@ -21,6 +21,7 @@ import com.example.android.architecture.blueprints.todoapp.data.Result.Success
 import com.example.android.architecture.blueprints.todoapp.data.Task
 import com.example.android.architecture.blueprints.todoapp.data.source.TasksDataSource
 import kotlinx.coroutines.delay
+import java.util.Date
 
 /**
  * Implementation of the data source that adds a latency simulating network.
@@ -32,8 +33,8 @@ object TasksRemoteDataSource : TasksDataSource {
     private var TASKS_SERVICE_DATA = LinkedHashMap<String, Task>(2)
 
     init {
-        addTask("Build tower in Pisa", "Ground looks good, no foundation work required.")
-        addTask("Finish bridge in Tacoma", "Found awesome girders at half the cost!")
+        addTask(Date(0),"Build tower in Pisa",10)
+        addTask(Date(0),"Finish bridge in Tacoma",20)
     }
 
     override suspend fun getTasks(): Result<List<Task>> {
@@ -52,37 +53,13 @@ object TasksRemoteDataSource : TasksDataSource {
         return Error(Exception("Task not found"))
     }
 
-    private fun addTask(title: String, description: String) {
-        val newTask = Task(title, description)
+    private fun addTask(date:Date, title: String, amount:Int) {
+        val newTask = Task(date, title, amount)
         TASKS_SERVICE_DATA[newTask.id] = newTask
     }
 
     override suspend fun saveTask(task: Task) {
         TASKS_SERVICE_DATA[task.id] = task
-    }
-
-    override suspend fun completeTask(task: Task) {
-        val completedTask = Task(task.title, task.description, true, task.id)
-        TASKS_SERVICE_DATA[task.id] = completedTask
-    }
-
-    override suspend fun completeTask(taskId: String) {
-        // Not required for the remote data source
-    }
-
-    override suspend fun activateTask(task: Task) {
-        val activeTask = Task(task.title, task.description, false, task.id)
-        TASKS_SERVICE_DATA[task.id] = activeTask
-    }
-
-    override suspend fun activateTask(taskId: String) {
-        // Not required for the remote data source
-    }
-
-    override suspend fun clearCompletedTasks() {
-        TASKS_SERVICE_DATA = TASKS_SERVICE_DATA.filterValues {
-            !it.isCompleted
-        } as LinkedHashMap<String, Task>
     }
 
     override suspend fun deleteAllTasks() {

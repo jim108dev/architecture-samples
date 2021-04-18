@@ -165,12 +165,12 @@ class TasksDaoTest {
     }
 
     @Test
-    fun deleteTasksAndGettingTasks() = runBlockingTest {
+    fun deleteAllTasksAndGettingTasks() = runBlockingTest {
         // Given a task inserted
         database.taskDao().insertTask(Task("title", "description"))
 
         // When deleting all tasks
-        database.taskDao().deleteTasks()
+        database.taskDao().deleteAllTasks()
 
         // THEN - The list is empty
         val tasks = database.taskDao().getTasks()

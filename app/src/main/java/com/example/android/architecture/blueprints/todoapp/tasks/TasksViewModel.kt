@@ -17,27 +17,22 @@ package com.example.android.architecture.blueprints.todoapp.tasks
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.android.architecture.blueprints.todoapp.Event
 import com.example.android.architecture.blueprints.todoapp.R
 import com.example.android.architecture.blueprints.todoapp.data.Result.Success
 import com.example.android.architecture.blueprints.todoapp.data.Task
 import com.example.android.architecture.blueprints.todoapp.data.source.TasksDataSource
+import com.example.android.architecture.blueprints.todoapp.domain.DeleteAllTasksUseCase
 import com.example.android.architecture.blueprints.todoapp.domain.GetTasksUseCase
-import com.example.android.architecture.blueprints.todoapp.util.DateUtil
 import com.example.android.architecture.blueprints.todoapp.util.wrapEspressoIdlingResource
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
 
 /**
  * ViewModel for the task list screen.
  */
 class TasksViewModel(
+    private val deleteAllTasksUseCase: DeleteAllTasksUseCase,
     private val getTasksUseCase: GetTasksUseCase
 ) : ViewModel() {
 
@@ -46,9 +41,6 @@ class TasksViewModel(
 
     private val _dataLoading = MutableLiveData<Boolean>()
     val dataLoading: LiveData<Boolean> = _dataLoading
-
-    private val _currentFilteringLabel = MutableLiveData<Int>()
-    val currentFilteringLabel: LiveData<Int> = _currentFilteringLabel
 
     private val _noTasksLabel = MutableLiveData<Int>()
     val noTasksLabel: LiveData<Int> = _noTasksLabel
@@ -121,7 +113,6 @@ class TasksViewModel(
         @StringRes filteringLabelString: Int, @StringRes noTasksLabelString: Int,
         @DrawableRes noTaskIconDrawable: Int, tasksAddVisible: Boolean
     ) {
-        _currentFilteringLabel.value = filteringLabelString
         _noTasksLabel.value = noTasksLabelString
         _noTaskIconRes.value = noTaskIconDrawable
         _tasksAddViewVisible.value = tasksAddVisible
@@ -146,6 +137,15 @@ class TasksViewModel(
             EDIT_RESULT_OK -> showSnackbarMessage(R.string.successfully_saved_task_message)
             ADD_EDIT_RESULT_OK -> showSnackbarMessage(R.string.successfully_added_task_message)
             DELETE_RESULT_OK -> showSnackbarMessage(R.string.successfully_deleted_task_message)
+        }
+    }
+
+    fun deleteAllTasks() {
+        viewModelScope.launch {
+            deleteAllTasksUseCase()
+            showSnackbarMessage(R.string.delete_all_tasks)
+
+            loadTasks(true)
         }
     }
 
@@ -174,10 +174,6 @@ class TasksViewModel(
                 _dataLoading.value = false
             }
         }
-    }
-
-    fun formatAmount(amount: Long):String {
-        return amount.toString()
     }
 
     fun refresh() {

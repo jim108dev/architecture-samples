@@ -19,10 +19,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.android.architecture.blueprints.todoapp.addedittask.AddEditTaskViewModel
 import com.example.android.architecture.blueprints.todoapp.data.source.TasksRepository
-import com.example.android.architecture.blueprints.todoapp.domain.DeleteTaskUseCase
-import com.example.android.architecture.blueprints.todoapp.domain.GetTaskUseCase
-import com.example.android.architecture.blueprints.todoapp.domain.GetTasksUseCase
-import com.example.android.architecture.blueprints.todoapp.domain.SaveTaskUseCase
+import com.example.android.architecture.blueprints.todoapp.domain.*
 import com.example.android.architecture.blueprints.todoapp.statistics.StatisticsViewModel
 import com.example.android.architecture.blueprints.todoapp.tasks.TasksViewModel
 
@@ -48,6 +45,7 @@ class ViewModelFactory constructor(
                         )
                     isAssignableFrom(TasksViewModel::class.java) ->
                         TasksViewModel(
+                                DeleteAllTasksUseCase(tasksRepository),
                                 GetTasksUseCase(tasksRepository)
                         )
                     else ->

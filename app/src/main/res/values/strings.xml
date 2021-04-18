@@ -21,7 +21,7 @@
     <string name="task_marked_complete">Task marked complete</string>
     <string name="task_marked_active">Task marked active</string>
     <string name="loading_tasks_error">Error while loading tasks</string>
-    <string name="completed_tasks_cleared">Completed tasks cleared</string>
+    <string name="delete_all_tasks">All tasks deleted</string>
     <string name="menu_filter">Filter</string>
     <string name="menu_delete_all">Delete all</string>
     <string name="menu_delete_task">Delete task</string>
