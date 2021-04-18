@@ -81,7 +81,7 @@ class AddEditTaskFragmentTest {
 
         // WHEN - Enter invalid title and description combination and click save
         onView(withId(R.id.add_task_title_edit_text)).perform(clearText())
-        onView(withId(R.id.add_task_description_edit_text)).perform(clearText())
+        onView(withId(R.id.add_position_amount_edit_text)).perform(clearText())
         onView(withId(R.id.save_task_fab)).perform(click())
 
         // THEN - Entered Task is still displayed (a correct task would close it).
@@ -96,7 +96,7 @@ class AddEditTaskFragmentTest {
 
         // WHEN - Valid title and description combination and click save
         onView(withId(R.id.add_task_title_edit_text)).perform(replaceText("title"))
-        onView(withId(R.id.add_task_description_edit_text)).perform(replaceText("description"))
+        onView(withId(R.id.add_position_amount_edit_text)).perform(replaceText("description"))
         onView(withId(R.id.save_task_fab)).perform(click())
 
         // THEN - Verify that we navigated back to the tasks screen.
@@ -125,7 +125,7 @@ class AddEditTaskFragmentTest {
 
         // WHEN - Valid title and description combination and click save
         onView(withId(R.id.add_task_title_edit_text)).perform(replaceText("title"))
-        onView(withId(R.id.add_task_description_edit_text)).perform(replaceText("description"))
+        onView(withId(R.id.add_position_amount_edit_text)).perform(replaceText("description"))
         onView(withId(R.id.save_task_fab)).perform(click())
 
         // THEN - Verify that the repository saved the task

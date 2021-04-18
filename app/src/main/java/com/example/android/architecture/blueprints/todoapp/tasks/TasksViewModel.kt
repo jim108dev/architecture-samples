@@ -27,21 +27,17 @@ import com.example.android.architecture.blueprints.todoapp.R
 import com.example.android.architecture.blueprints.todoapp.data.Result.Success
 import com.example.android.architecture.blueprints.todoapp.data.Task
 import com.example.android.architecture.blueprints.todoapp.data.source.TasksDataSource
-import com.example.android.architecture.blueprints.todoapp.domain.ActivateTaskUseCase
-import com.example.android.architecture.blueprints.todoapp.domain.ClearCompletedTasksUseCase
-import com.example.android.architecture.blueprints.todoapp.domain.CompleteTaskUseCase
 import com.example.android.architecture.blueprints.todoapp.domain.GetTasksUseCase
 import com.example.android.architecture.blueprints.todoapp.util.wrapEspressoIdlingResource
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * ViewModel for the task list screen.
  */
 class TasksViewModel(
-    private val getTasksUseCase: GetTasksUseCase,
-    private val clearCompletedTasksUseCase: ClearCompletedTasksUseCase,
-    private val completeTaskUseCase: CompleteTaskUseCase,
-    private val activateTaskUseCase: ActivateTaskUseCase
+    private val getTasksUseCase: GetTasksUseCase
 ) : ViewModel() {
 
     private val _items = MutableLiveData<List<Task>>().apply { value = emptyList() }
@@ -65,7 +61,7 @@ class TasksViewModel(
     private val _snackbarText = MutableLiveData<Event<Int>>()
     val snackbarText: LiveData<Event<Int>> = _snackbarText
 
-    private var _currentFiltering = TasksFilterType.ALL_TASKS
+    private var _currentFiltering = TasksFilterType.ALL
 
     // Not used at the moment
     private val isDataLoadingError = MutableLiveData<Boolean>()
@@ -83,35 +79,35 @@ class TasksViewModel(
 
     init {
         // Set initial state
-        setFiltering(TasksFilterType.ALL_TASKS)
+        setFiltering(TasksFilterType.ALL)
         loadTasks(true)
     }
 
     /**
      * Sets the current task filtering type.
      *
-     * @param requestType Can be [TasksFilterType.ALL_TASKS],
-     * [TasksFilterType.COMPLETED_TASKS], or
-     * [TasksFilterType.ACTIVE_TASKS]
+     * @param requestType Can be [TasksFilterType.ALL],
+     * [TasksFilterType.CREDIT], or
+     * [TasksFilterType.DEBIT]
      */
     fun setFiltering(requestType: TasksFilterType) {
         _currentFiltering = requestType
 
         // Depending on the filter type, set the filtering label, icon drawables, etc.
         when (requestType) {
-            TasksFilterType.ALL_TASKS -> {
+            TasksFilterType.ALL -> {
                 setFilter(
                     R.string.label_all, R.string.no_tasks_all,
                     R.drawable.logo_no_fill, true
                 )
             }
-            TasksFilterType.ACTIVE_TASKS -> {
+            TasksFilterType.DEBIT -> {
                 setFilter(
                     R.string.label_active, R.string.no_tasks_active,
                     R.drawable.ic_check_circle_96dp, false
                 )
             }
-            TasksFilterType.COMPLETED_TASKS -> {
+            TasksFilterType.CREDIT -> {
                 setFilter(
                     R.string.label_completed, R.string.no_tasks_completed,
                     R.drawable.ic_verified_user_96dp, false
@@ -128,27 +124,6 @@ class TasksViewModel(
         _noTasksLabel.value = noTasksLabelString
         _noTaskIconRes.value = noTaskIconDrawable
         _tasksAddViewVisible.value = tasksAddVisible
-    }
-
-    fun clearCompletedTasks() {
-        viewModelScope.launch {
-            clearCompletedTasksUseCase()
-            showSnackbarMessage(R.string.completed_tasks_cleared)
-            // Refresh list to show the new state
-            loadTasks(false)
-        }
-    }
-
-    fun completeTask(task: Task, completed: Boolean) = viewModelScope.launch {
-        if (completed) {
-            completeTaskUseCase(task)
-            showSnackbarMessage(R.string.task_marked_complete)
-        } else {
-            activateTaskUseCase(task)
-            showSnackbarMessage(R.string.task_marked_active)
-        }
-        // Refresh list to show the new state
-        loadTasks(false)
     }
 
     /**
@@ -198,6 +173,15 @@ class TasksViewModel(
                 _dataLoading.value = false
             }
         }
+    }
+
+    fun formatAmount(amount: Long):String {
+        return amount.toString()
+    }
+
+    fun formatDate(date: Date) : String {
+        val format = SimpleDateFormat("dd/MM/yyy")
+        return format.format(date)
     }
 
     fun refresh() {

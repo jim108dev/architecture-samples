@@ -60,18 +60,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="1dp"
-                    android:text="@{@string/statistics_active_tasks(viewmodel.activeTasksPercent)}"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:visibility="@{viewmodel.empty ? View.GONE : View.VISIBLE}" />
-
-                <!-- android:paddingTop specified to temporarily work around -->
-                <!-- https://github.com/robolectric/robolectric/issues/4588 -->
-                <TextView
-                    android:id="@+id/stats_completed_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="1dp"
-                    android:text="@{@string/statistics_completed_tasks(viewmodel.completedTasksPercent)}"
+                    android:text="@{@string/statistics_active_tasks(viewmodel.numPositions)}"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:visibility="@{viewmodel.empty ? View.GONE : View.VISIBLE}" />
 

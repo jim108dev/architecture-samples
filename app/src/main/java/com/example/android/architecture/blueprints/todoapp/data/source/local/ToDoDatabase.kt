@@ -18,6 +18,8 @@ package com.example.android.architecture.blueprints.todoapp.data.source.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.example.android.architecture.blueprints.todoapp.data.Converters
 import com.example.android.architecture.blueprints.todoapp.data.Task
 
 /**
@@ -26,6 +28,7 @@ import com.example.android.architecture.blueprints.todoapp.data.Task
  * Note that exportSchema should be true in production databases.
  */
 @Database(entities = [Task::class], version = 1, exportSchema = false)
+@TypeConverters(Converters::class)
 abstract class ToDoDatabase : RoomDatabase() {
 
     abstract fun taskDao(): TasksDao

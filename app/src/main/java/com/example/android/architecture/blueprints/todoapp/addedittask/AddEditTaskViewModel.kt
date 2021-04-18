@@ -27,6 +27,7 @@ import com.example.android.architecture.blueprints.todoapp.data.Task
 import com.example.android.architecture.blueprints.todoapp.domain.GetTaskUseCase
 import com.example.android.architecture.blueprints.todoapp.domain.SaveTaskUseCase
 import kotlinx.coroutines.launch
+import java.util.*
 
 /**
  * ViewModel for the Add/Edit screen.
@@ -36,11 +37,11 @@ class AddEditTaskViewModel(
     private val saveUseCase: SaveTaskUseCase
 ) : ViewModel() {
 
-    // Two-way databinding, exposing MutableLiveData
+    val date = MutableLiveData<String>()
+
     val title = MutableLiveData<String>()
 
-    // Two-way databinding, exposing MutableLiveData
-    val description = MutableLiveData<String>()
+    val amount = MutableLiveData<String>()
 
     private val _dataLoading = MutableLiveData<Boolean>()
     val dataLoading: LiveData<Boolean> = _dataLoading
@@ -56,8 +57,6 @@ class AddEditTaskViewModel(
     private var isNewTask: Boolean = false
 
     private var isDataLoaded = false
-
-    private var taskCompleted = false
 
     fun start(taskId: String?) {
         if (_dataLoading.value == true) {
@@ -90,9 +89,9 @@ class AddEditTaskViewModel(
     }
 
     private fun onTaskLoaded(task: Task) {
+        date.value = task.date
         title.value = task.title
-        description.value = task.description
-        taskCompleted = task.isCompleted
+        amount.value = task.amount
         _dataLoading.value = false
         isDataLoaded = true
     }
@@ -103,23 +102,20 @@ class AddEditTaskViewModel(
 
     // Called when clicking on fab.
     fun saveTask() {
+        val currentDate = date.value
         val currentTitle = title.value
-        val currentDescription = description.value
+        val currentAmount = amount.value
 
-        if (currentTitle == null || currentDescription == null) {
-            _snackbarText.value = Event(R.string.empty_task_message)
-            return
-        }
-        if (Task(currentTitle, currentDescription).isEmpty) {
+        if (currentDate == null || currentTitle == null || currentAmount == null) {
             _snackbarText.value = Event(R.string.empty_task_message)
             return
         }
 
         val currentTaskId = taskId
         if (isNewTask || currentTaskId == null) {
-            createTask(Task(currentTitle, currentDescription))
+            createTask(Task(currentDate,currentTitle, currentAmount))
         } else {
-            val task = Task(currentTitle, currentDescription, taskCompleted, currentTaskId)
+            val task = Task(currentDate,currentTitle, currentAmount, currentTaskId)
             updateTask(task)
         }
     }

@@ -152,55 +152,6 @@ class DefaultTasksRepository(
         }
     }
 
-    override suspend fun completeTask(task: Task) {
-        // Do in memory cache update to keep the app UI up to date
-        cacheAndPerform(task) {
-            it.isCompleted = true
-            coroutineScope {
-                launch { tasksRemoteDataSource.completeTask(it) }
-                launch { tasksLocalDataSource.completeTask(it) }
-            }
-        }
-    }
-
-    override suspend fun completeTask(taskId: String) {
-        withContext(ioDispatcher) {
-            getTaskWithId(taskId)?.let {
-                completeTask(it)
-            }
-        }
-    }
-
-    override suspend fun activateTask(task: Task) = withContext(ioDispatcher) {
-        // Do in memory cache update to keep the app UI up to date
-        cacheAndPerform(task) {
-            it.isCompleted = false
-            coroutineScope {
-                launch { tasksRemoteDataSource.activateTask(it) }
-                launch { tasksLocalDataSource.activateTask(it) }
-            }
-
-        }
-    }
-
-    override suspend fun activateTask(taskId: String) {
-        withContext(ioDispatcher) {
-            getTaskWithId(taskId)?.let {
-                activateTask(it)
-            }
-        }
-    }
-
-    override suspend fun clearCompletedTasks() {
-        coroutineScope {
-            launch { tasksRemoteDataSource.clearCompletedTasks() }
-            launch { tasksLocalDataSource.clearCompletedTasks() }
-        }
-        withContext(ioDispatcher) {
-            cachedTasks?.entries?.removeAll { it.value.isCompleted }
-        }
-    }
-
     override suspend fun deleteAllTasks() {
         withContext(ioDispatcher) {
             coroutineScope {
@@ -241,7 +192,7 @@ class DefaultTasksRepository(
     private fun getTaskWithId(id: String) = cachedTasks?.get(id)
 
     private fun cacheTask(task: Task): Task {
-        val cachedTask = Task(task.title, task.description, task.isCompleted, task.id)
+        val cachedTask = Task(task.date, task.title, task.amount, task.id)
         // Create if it doesn't exist.
         if (cachedTasks == null) {
             cachedTasks = ConcurrentHashMap()

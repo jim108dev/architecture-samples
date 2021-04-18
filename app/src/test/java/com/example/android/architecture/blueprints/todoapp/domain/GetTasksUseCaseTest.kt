@@ -4,8 +4,8 @@ import com.example.android.architecture.blueprints.todoapp.data.Result.Error
 import com.example.android.architecture.blueprints.todoapp.data.Result.Success
 import com.example.android.architecture.blueprints.todoapp.data.Task
 import com.example.android.architecture.blueprints.todoapp.data.source.FakeRepository
-import com.example.android.architecture.blueprints.todoapp.tasks.TasksFilterType.ACTIVE_TASKS
-import com.example.android.architecture.blueprints.todoapp.tasks.TasksFilterType.COMPLETED_TASKS
+import com.example.android.architecture.blueprints.todoapp.tasks.TasksFilterType.DEBIT
+import com.example.android.architecture.blueprints.todoapp.tasks.TasksFilterType.CREDIT
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.assertEquals
@@ -73,7 +73,7 @@ class GetTasksUseCaseTest {
         )
 
         // Load tasks
-        val result = useCase(currentFiltering = COMPLETED_TASKS)
+        val result = useCase(currentFiltering = CREDIT)
 
         // Verify the result is filtered correctly
         assertTrue(result is Success)
@@ -90,7 +90,7 @@ class GetTasksUseCaseTest {
         )
 
         // Load tasks
-        val result = useCase(currentFiltering = ACTIVE_TASKS)
+        val result = useCase(currentFiltering = DEBIT)
 
         // Verify the result is filtered correctly
         assertTrue(result is Success)

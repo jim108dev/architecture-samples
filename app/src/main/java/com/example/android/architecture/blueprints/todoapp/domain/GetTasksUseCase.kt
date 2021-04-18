@@ -5,9 +5,9 @@ import com.example.android.architecture.blueprints.todoapp.data.Result.Success
 import com.example.android.architecture.blueprints.todoapp.data.Task
 import com.example.android.architecture.blueprints.todoapp.data.source.TasksRepository
 import com.example.android.architecture.blueprints.todoapp.tasks.TasksFilterType
-import com.example.android.architecture.blueprints.todoapp.tasks.TasksFilterType.ACTIVE_TASKS
-import com.example.android.architecture.blueprints.todoapp.tasks.TasksFilterType.ALL_TASKS
-import com.example.android.architecture.blueprints.todoapp.tasks.TasksFilterType.COMPLETED_TASKS
+import com.example.android.architecture.blueprints.todoapp.tasks.TasksFilterType.DEBIT
+import com.example.android.architecture.blueprints.todoapp.tasks.TasksFilterType.ALL
+import com.example.android.architecture.blueprints.todoapp.tasks.TasksFilterType.CREDIT
 import com.example.android.architecture.blueprints.todoapp.util.wrapEspressoIdlingResource
 
 class GetTasksUseCase(
@@ -15,7 +15,7 @@ class GetTasksUseCase(
 ) {
     suspend operator fun invoke(
         forceUpdate: Boolean = false,
-        currentFiltering: TasksFilterType = ALL_TASKS
+        currentFiltering: TasksFilterType = ALL
     ): Result<List<Task>> {
 
         wrapEspressoIdlingResource {
@@ -23,17 +23,17 @@ class GetTasksUseCase(
             val tasksResult = tasksRepository.getTasks(forceUpdate)
 
             // Filter tasks
-            if (tasksResult is Success && currentFiltering != ALL_TASKS) {
+            if (tasksResult is Success && currentFiltering != ALL) {
                 val tasks = tasksResult.data
 
                 val tasksToShow = mutableListOf<Task>()
                 // We filter the tasks based on the requestType
                 for (task in tasks) {
                     when (currentFiltering) {
-                        ACTIVE_TASKS -> if (task.isActive) {
+                        DEBIT -> if (!task.amount.startsWith("-")) {
                             tasksToShow.add(task)
                         }
-                        COMPLETED_TASKS -> if (task.isCompleted) {
+                        CREDIT -> if (task.amount.startsWith("-")) {
                             tasksToShow.add(task)
                         }
                         else -> NotImplementedError()

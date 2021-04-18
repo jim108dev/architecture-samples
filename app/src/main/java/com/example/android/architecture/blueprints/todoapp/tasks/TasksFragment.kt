@@ -65,10 +65,6 @@ class TasksFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem) =
         when (item.itemId) {
-            R.id.menu_clear -> {
-                viewModel.clearCompletedTasks()
-                true
-            }
             R.id.menu_filter -> {
                 showFilteringPopUpMenu()
                 true
@@ -124,9 +120,9 @@ class TasksFragment : Fragment() {
             setOnMenuItemClickListener {
                 viewModel.setFiltering(
                     when (it.itemId) {
-                        R.id.active -> TasksFilterType.ACTIVE_TASKS
-                        R.id.completed -> TasksFilterType.COMPLETED_TASKS
-                        else -> TasksFilterType.ALL_TASKS
+                        R.id.active -> TasksFilterType.DEBIT
+                        R.id.completed -> TasksFilterType.CREDIT
+                        else -> TasksFilterType.ALL
                     }
                 )
                 viewModel.loadTasks(false)
@@ -154,7 +150,11 @@ class TasksFragment : Fragment() {
     }
 
     private fun openTaskDetails(taskId: String) {
-        val action = TasksFragmentDirections.actionTasksFragmentToTaskDetailFragment(taskId)
+        val action = TasksFragmentDirections
+                .actionTasksFragmentToAddEditTaskFragment(
+                        taskId,
+                        resources.getString(R.string.edit_task)
+                )
         findNavController().navigate(action)
     }
 

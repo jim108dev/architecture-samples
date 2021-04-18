@@ -57,26 +57,6 @@ class TasksLocalDataSource internal constructor(
         tasksDao.insertTask(task)
     }
 
-    override suspend fun completeTask(task: Task) = withContext(ioDispatcher) {
-        tasksDao.updateCompleted(task.id, true)
-    }
-
-    override suspend fun completeTask(taskId: String) {
-        tasksDao.updateCompleted(taskId, true)
-    }
-
-    override suspend fun activateTask(task: Task) = withContext(ioDispatcher) {
-        tasksDao.updateCompleted(task.id, false)
-    }
-
-    override suspend fun activateTask(taskId: String) {
-        tasksDao.updateCompleted(taskId, false)
-    }
-
-    override suspend fun clearCompletedTasks() = withContext<Unit>(ioDispatcher) {
-        tasksDao.deleteCompletedTasks()
-    }
-
     override suspend fun deleteAllTasks() = withContext(ioDispatcher) {
         tasksDao.deleteTasks()
     }

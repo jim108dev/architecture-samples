@@ -71,7 +71,7 @@ class AddEditTaskViewModelTest {
         val newDescription = "Some Task Description"
         (addEditTaskViewModel).apply {
             title.value = newTitle
-            description.value = newDescription
+            amount.value = newDescription
         }
         addEditTaskViewModel.saveTask()
 
@@ -110,7 +110,7 @@ class AddEditTaskViewModelTest {
 
         // Verify a task is loaded
         assertThat(getValue(addEditTaskViewModel.title)).isEqualTo(task.title)
-        assertThat(getValue(addEditTaskViewModel.description)).isEqualTo(task.description)
+        assertThat(getValue(addEditTaskViewModel.amount)).isEqualTo(task.description)
         assertThat(getValue(addEditTaskViewModel.dataLoading)).isFalse()
     }
 
@@ -147,7 +147,7 @@ class AddEditTaskViewModelTest {
     private fun saveTaskAndAssertSnackbarError(title: String?, description: String?) {
         (addEditTaskViewModel).apply {
             this.title.value = title
-            this.description.value = description
+            this.amount.value = description
         }
 
         // When saving an incomplete task

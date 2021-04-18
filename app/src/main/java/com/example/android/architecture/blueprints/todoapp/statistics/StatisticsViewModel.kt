@@ -45,15 +45,8 @@ class StatisticsViewModel(
     private val _empty = MutableLiveData<Boolean>()
     val empty: LiveData<Boolean> = _empty
 
-    private val _activeTasksPercent = MutableLiveData<Float>()
-    val activeTasksPercent: LiveData<Float> = _activeTasksPercent
-
-    private val _completedTasksPercent = MutableLiveData<Float>()
-    val completedTasksPercent: LiveData<Float> = _completedTasksPercent
-
-    private var activeTasks = 0
-
-    private var completedTasks = 0
+    private val _numPositions = MutableLiveData<Int>()
+    val numPositions: LiveData<Int> = _numPositions
 
     init {
         start()
@@ -73,8 +66,6 @@ class StatisticsViewModel(
                         computeStats(result.data)
                     } else {
                         _error.value = true
-                        activeTasks = 0
-                        completedTasks = 0
                         computeStats(null)
                     }
                 }
@@ -91,8 +82,7 @@ class StatisticsViewModel(
      */
     private fun computeStats(tasks: List<Task>?) {
         getActiveAndCompletedStats(tasks).let {
-            _activeTasksPercent.value = it.activeTasksPercent
-            _completedTasksPercent.value = it.completedTasksPercent
+            _numPositions.value = it.numPositions
         }
         _empty.value = tasks.isNullOrEmpty()
         _dataLoading.value = false

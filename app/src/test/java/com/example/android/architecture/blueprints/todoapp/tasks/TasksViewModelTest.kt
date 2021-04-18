@@ -80,7 +80,7 @@ class TasksViewModelTest {
 
         // Given an initialized TasksViewModel with initialized tasks
         // When loading of Tasks is requested
-        tasksViewModel.setFiltering(TasksFilterType.ALL_TASKS)
+        tasksViewModel.setFiltering(TasksFilterType.ALL)
 
         // Trigger loading of tasks
         tasksViewModel.loadTasks(true)
@@ -102,7 +102,7 @@ class TasksViewModelTest {
     fun loadActiveTasksFromRepositoryAndLoadIntoView() {
         // Given an initialized TasksViewModel with initialized tasks
         // When loading of Tasks is requested
-        tasksViewModel.setFiltering(TasksFilterType.ACTIVE_TASKS)
+        tasksViewModel.setFiltering(TasksFilterType.DEBIT)
 
         // Load tasks
         tasksViewModel.loadTasks(true)
@@ -118,7 +118,7 @@ class TasksViewModelTest {
     fun loadCompletedTasksFromRepositoryAndLoadIntoView() {
         // Given an initialized TasksViewModel with initialized tasks
         // When loading of Tasks is requested
-        tasksViewModel.setFiltering(TasksFilterType.COMPLETED_TASKS)
+        tasksViewModel.setFiltering(TasksFilterType.CREDIT)
 
         // Load tasks
         tasksViewModel.loadTasks(true)
@@ -263,8 +263,8 @@ class TasksViewModelTest {
 
     @Test
     fun getTasksAddViewVisible() {
-        // When the filter type is ALL_TASKS
-        tasksViewModel.setFiltering(TasksFilterType.ALL_TASKS)
+        // When the filter type is ALL
+        tasksViewModel.setFiltering(TasksFilterType.ALL)
 
         // Then the "Add task" action is visible
         assertThat(LiveDataTestUtil.getValue(tasksViewModel.tasksAddViewVisible)).isTrue()

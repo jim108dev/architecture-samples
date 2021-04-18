@@ -42,30 +42,6 @@ object FakeTasksRemoteDataSource : TasksDataSource {
         TASKS_SERVICE_DATA[task.id] = task
     }
 
-    override suspend fun completeTask(task: Task) {
-        val completedTask = Task(task.title, task.description, true, task.id)
-        TASKS_SERVICE_DATA[task.id] = completedTask
-    }
-
-    override suspend fun completeTask(taskId: String) {
-        // Not required for the remote data source.
-    }
-
-    override suspend fun activateTask(task: Task) {
-        val activeTask = Task(task.title, task.description, false, task.id)
-        TASKS_SERVICE_DATA[task.id] = activeTask
-    }
-
-    override suspend fun activateTask(taskId: String) {
-        // Not required for the remote data source.
-    }
-
-    override suspend fun clearCompletedTasks() {
-        TASKS_SERVICE_DATA = TASKS_SERVICE_DATA.filterValues {
-            !it.isCompleted
-        } as LinkedHashMap<String, Task>
-    }
-
     override suspend fun deleteTask(taskId: String) {
         TASKS_SERVICE_DATA.remove(taskId)
     }
