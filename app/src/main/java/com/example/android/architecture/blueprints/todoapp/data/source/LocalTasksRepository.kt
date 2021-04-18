@@ -47,7 +47,7 @@ class LocalTasksRepository(
             // Respond immediately with cache if available and not dirty
             if (!forceUpdate) {
                 cachedTasks?.let { cachedTasks ->
-                    return@withContext Success(cachedTasks.values.sortedBy { it.id })
+                    return@withContext Success(cachedTasks.values.sortedBy { it.date })
                 }
             }
 
@@ -56,7 +56,7 @@ class LocalTasksRepository(
             (newTasks as? Success)?.let { refreshCache(it.data) }
 
             cachedTasks?.values?.let { tasks ->
-                return@withContext Success(tasks.sortedBy { it.id })
+                return@withContext Success(tasks.sortedBy { it.date })
             }
 
             (newTasks as? Success)?.let {

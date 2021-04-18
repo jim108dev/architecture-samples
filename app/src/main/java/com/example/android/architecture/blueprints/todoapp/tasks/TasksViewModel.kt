@@ -65,7 +65,6 @@ class TasksViewModel(
     private val _newTaskEvent = MutableLiveData<Event<Unit>>()
     val newTaskEvent: LiveData<Event<Unit>> = _newTaskEvent
 
-    // This LiveData depends on another so we can use a transformation.
     val empty: LiveData<Boolean> = Transformations.map(_items) {
         it.isEmpty()
     }
@@ -76,13 +75,6 @@ class TasksViewModel(
         loadTasks(true)
     }
 
-    /**
-     * Sets the current task filtering type.
-     *
-     * @param requestType Can be [TasksFilterType.ALL],
-     * [TasksFilterType.CREDIT], or
-     * [TasksFilterType.DEBIT]
-     */
     fun setFiltering(requestType: TasksFilterType) {
         _currentFiltering = requestType
 
