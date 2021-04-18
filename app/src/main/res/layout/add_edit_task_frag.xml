@@ -43,46 +43,45 @@
                 android:layout_height="?android:attr/listPreferredItemHeight"
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingBottom="@dimen/activity_vertical_margin"
-                android:paddingTop="@dimen/activity_vertical_margin"
                 android:visibility="@{viewmodel.dataLoading ? View.GONE : View.VISIBLE}">
 
-                    <EditText
-                        android:id="@+id/add_position_date"
-                        android:background="@null"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:hint="@string/date_hint"
-                        android:imeOptions="flagNoExtractUi"
-                        android:text="@={viewmodel.date}"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+                <TextView
+                    android:id="@+id/add_position_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:ems="10"
+                    android:hint="@string/date_hint"
+                    android:text="@={viewmodel.date}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
+                <EditText
+                    android:id="@+id/add_task_title_edit_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:background="@null"
+                    android:hint="@string/title_hint"
+                    android:imeOptions="flagNoExtractUi"
+                    android:text="@={viewmodel.title}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
-                    <EditText
-                        android:id="@+id/add_task_title_edit_text"
-                        android:background="@null"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:hint="@string/title_hint"
-                        android:imeOptions="flagNoExtractUi"
-                        android:text="@={viewmodel.title}"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+                <EditText
+                    android:id="@+id/add_position_amount_edit_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="@string/amount_hint"
+                    android:imeOptions="flagNoExtractUi"
+                    android:inputType="numberSigned"
+                    android:text="@={viewmodel.amount}" />
 
-                    <EditText
-                        android:id="@+id/add_position_amount_edit_text"
-                        android:background="@null"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:hint="@string/amount_hint"
-                        android:imeOptions="flagNoExtractUi"
-                        android:text="@={viewmodel.amount}"
-                        android:inputType="number"/>
-
-                </LinearLayout>
+            </LinearLayout>
 
         </com.example.android.architecture.blueprints.todoapp.ScrollChildSwipeRefreshLayout>
 
@@ -91,8 +90,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/fab_margin"
-            android:src="@drawable/ic_done"
             android:onClick="@{() -> viewmodel.saveTask()}"
+            android:src="@drawable/ic_done"
             app:fabSize="normal"
             app:layout_anchor="@id/refresh_layout"
             app:layout_anchorGravity="bottom|right|end" />

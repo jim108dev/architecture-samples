@@ -15,6 +15,7 @@
  */
 package com.example.android.architecture.blueprints.todoapp.addedittask
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -24,12 +25,15 @@ import androidx.navigation.fragment.navArgs
 import com.example.android.architecture.blueprints.todoapp.EventObserver
 import com.example.android.architecture.blueprints.todoapp.R
 import com.example.android.architecture.blueprints.todoapp.databinding.AddEditTaskFragBinding
-import com.example.android.architecture.blueprints.todoapp.databinding.AddEditTaskFragBindingImpl
 import com.example.android.architecture.blueprints.todoapp.tasks.ADD_EDIT_RESULT_OK
 import com.example.android.architecture.blueprints.todoapp.util.getViewModelFactory
 import com.example.android.architecture.blueprints.todoapp.util.setupRefreshLayout
 import com.example.android.architecture.blueprints.todoapp.util.setupSnackbar
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.add_edit_task_frag.*
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 /**
  * Main UI for the add task screen. Users can enter a task title and description.
@@ -64,6 +68,13 @@ class AddEditTaskFragment : Fragment() {
         viewModel.start(args.taskId)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        add_position_date.setOnClickListener{
+            pickerListener()
+        }
+        super.onViewCreated(view, savedInstanceState)
+    }
+
     private fun setupSnackbar() {
         view?.setupSnackbar(this, viewModel.snackbarText, Snackbar.LENGTH_SHORT)
     }
@@ -90,5 +101,23 @@ class AddEditTaskFragment : Fragment() {
         if (args.taskId != null) {
             inflater.inflate(R.menu.edit_task_fragment_menu, menu)
         }
+    }
+
+    private fun pickerListener() {
+        val myCalendar = Calendar.getInstance()
+        val date = DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+
+            myCalendar.set(Calendar.YEAR, year)
+            myCalendar.set(Calendar.MONTH, monthOfYear)
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            val myFormat = "MM/dd"
+            val sdf = SimpleDateFormat(myFormat, Locale.ENGLISH)
+
+            add_position_date.text = sdf.format(myCalendar.time)
+        }
+
+        DatePickerDialog(context, date, myCalendar
+                .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                myCalendar.get(Calendar.DAY_OF_MONTH)).show()
     }
 }
