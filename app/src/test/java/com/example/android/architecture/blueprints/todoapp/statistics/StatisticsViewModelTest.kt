@@ -20,7 +20,7 @@ import com.example.android.architecture.blueprints.todoapp.FakeFailingTasksRemot
 import com.example.android.architecture.blueprints.todoapp.LiveDataTestUtil
 import com.example.android.architecture.blueprints.todoapp.MainCoroutineRule
 import com.example.android.architecture.blueprints.todoapp.data.Task
-import com.example.android.architecture.blueprints.todoapp.data.source.DefaultTasksRepository
+import com.example.android.architecture.blueprints.todoapp.data.source.LocalTasksRepository
 import com.example.android.architecture.blueprints.todoapp.data.source.FakeRepository
 import com.example.android.architecture.blueprints.todoapp.domain.GetTasksUseCase
 import com.google.common.truth.Truth.assertThat
@@ -93,7 +93,7 @@ class StatisticsViewModelTest {
     fun loadStatisticsWhenTasksAreUnavailable_CallErrorToDisplay() =
         mainCoroutineRule.runBlockingTest {
 
-            val failingRepository = DefaultTasksRepository(
+            val failingRepository = LocalTasksRepository(
                 FakeFailingTasksRemoteDataSource,
                 FakeFailingTasksRemoteDataSource,
                 Dispatchers.Main  // Main is set in MainCoroutineRule

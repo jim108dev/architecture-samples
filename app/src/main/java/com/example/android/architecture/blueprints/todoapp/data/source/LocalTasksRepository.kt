@@ -24,7 +24,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 
@@ -34,7 +33,7 @@ import java.util.concurrent.ConcurrentMap
  * To simplify the sample, this repository only uses the local data source only if the remote
  * data source fails. Remote is the source of truth.
  */
-class DefaultTasksRepository(
+class LocalTasksRepository(
     private val tasksRemoteDataSource: TasksDataSource,
     private val tasksLocalDataSource: TasksDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
@@ -52,9 +51,8 @@ class DefaultTasksRepository(
                 }
             }
 
-            val newTasks = fetchTasksFromRemoteOrLocal(forceUpdate)
+            val newTasks = fetchTasksFromLocal(forceUpdate)
 
-            // Refresh the cache with the new tasks
             (newTasks as? Success)?.let { refreshCache(it.data) }
 
             cachedTasks?.values?.let { tasks ->
@@ -71,27 +69,10 @@ class DefaultTasksRepository(
         }
     }
 
-    private suspend fun fetchTasksFromRemoteOrLocal(forceUpdate: Boolean): Result<List<Task>> {
-        // Remote first
-        val remoteTasks = tasksRemoteDataSource.getTasks()
-        when (remoteTasks) {
-            is Error -> Timber.w("Remote data source fetch failed")
-            is Success -> {
-                refreshLocalDataSource(remoteTasks.data)
-                return remoteTasks
-            }
-            else -> throw IllegalStateException()
-        }
-
-        // Don't read from local if it's forced
-        if (forceUpdate) {
-            return Error(Exception("Can't force refresh: remote data source is unavailable"))
-        }
-
-        // Local if remote fails
+    private suspend fun fetchTasksFromLocal(forceUpdate: Boolean): Result<List<Task>> {
         val localTasks = tasksLocalDataSource.getTasks()
         if (localTasks is Success) return localTasks
-        return Error(Exception("Error fetching from remote and local"))
+        return Error(Exception("Error fetching from  local"))
     }
 
     /**
@@ -107,7 +88,7 @@ class DefaultTasksRepository(
                 }
             }
 
-            val newTask = fetchTaskFromRemoteOrLocal(taskId, forceUpdate)
+            val newTask = fetchTaskFromLocal(taskId)
 
             // Refresh the cache with the new tasks
             (newTask as? Success)?.let { cacheTask(it.data) }
@@ -116,27 +97,10 @@ class DefaultTasksRepository(
         }
     }
 
-    private suspend fun fetchTaskFromRemoteOrLocal(
-        taskId: String,
-        forceUpdate: Boolean
+    private suspend fun fetchTaskFromLocal(
+        taskId: String
     ): Result<Task> {
-        // Remote first
-        val remoteTask = tasksRemoteDataSource.getTask(taskId)
-        when (remoteTask) {
-            is Error -> Timber.w("Remote data source fetch failed")
-            is Success -> {
-                refreshLocalDataSource(remoteTask.data)
-                return remoteTask
-            }
-            else -> throw IllegalStateException()
-        }
 
-        // Don't read from local if it's forced
-        if (forceUpdate) {
-            return Error(Exception("Refresh failed"))
-        }
-
-        // Local if remote fails
         val localTasks = tasksLocalDataSource.getTask(taskId)
         if (localTasks is Success) return localTasks
         return Error(Exception("Error fetching from remote and local"))
@@ -146,7 +110,6 @@ class DefaultTasksRepository(
         // Do in memory cache update to keep the app UI up to date
         cacheAndPerform(task) {
             coroutineScope {
-                launch { tasksRemoteDataSource.saveTask(it) }
                 launch { tasksLocalDataSource.saveTask(it) }
             }
         }
@@ -155,7 +118,6 @@ class DefaultTasksRepository(
     override suspend fun deleteAllTasks() {
         withContext(ioDispatcher) {
             coroutineScope {
-                launch { tasksRemoteDataSource.deleteAllTasks() }
                 launch { tasksLocalDataSource.deleteAllTasks() }
             }
         }
@@ -164,7 +126,6 @@ class DefaultTasksRepository(
 
     override suspend fun deleteTask(taskId: String) {
         coroutineScope {
-            launch { tasksRemoteDataSource.deleteTask(taskId) }
             launch { tasksLocalDataSource.deleteTask(taskId) }
         }
 
@@ -176,17 +137,6 @@ class DefaultTasksRepository(
         tasks.sortedBy { it.id }.forEach {
             cacheAndPerform(it) {}
         }
-    }
-
-    private suspend fun refreshLocalDataSource(tasks: List<Task>) {
-        tasksLocalDataSource.deleteAllTasks()
-        for (task in tasks) {
-            tasksLocalDataSource.saveTask(task)
-        }
-    }
-
-    private suspend fun refreshLocalDataSource(task: Task) {
-        tasksLocalDataSource.saveTask(task)
     }
 
     private fun getTaskWithId(id: String) = cachedTasks?.get(id)

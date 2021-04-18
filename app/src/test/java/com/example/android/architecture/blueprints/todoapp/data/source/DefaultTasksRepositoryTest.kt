@@ -42,7 +42,7 @@ class DefaultTasksRepositoryTest {
     private lateinit var tasksLocalDataSource: FakeDataSource
 
     // Class under test
-    private lateinit var tasksRepository: DefaultTasksRepository
+    private lateinit var tasksRepository: LocalTasksRepository
 
     @ExperimentalCoroutinesApi
     @Before
@@ -50,7 +50,7 @@ class DefaultTasksRepositoryTest {
         tasksRemoteDataSource = FakeDataSource(remoteTasks.toMutableList())
         tasksLocalDataSource = FakeDataSource(localTasks.toMutableList())
         // Get a reference to the class under test
-        tasksRepository = DefaultTasksRepository(
+        tasksRepository = LocalTasksRepository(
             tasksRemoteDataSource, tasksLocalDataSource, Dispatchers.Unconfined
         )
     }
@@ -59,7 +59,7 @@ class DefaultTasksRepositoryTest {
     @Test
     fun getTasks_emptyRepositoryAndUninitializedCache() = runBlockingTest {
         val emptySource = FakeDataSource()
-        val tasksRepository = DefaultTasksRepository(
+        val tasksRepository = LocalTasksRepository(
             emptySource, emptySource, Dispatchers.Unconfined
         )
 

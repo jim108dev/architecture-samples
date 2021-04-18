@@ -19,7 +19,7 @@ import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.room.Room
 import com.example.android.architecture.blueprints.todoapp.data.FakeTasksRemoteDataSource
-import com.example.android.architecture.blueprints.todoapp.data.source.DefaultTasksRepository
+import com.example.android.architecture.blueprints.todoapp.data.source.LocalTasksRepository
 import com.example.android.architecture.blueprints.todoapp.data.source.TasksDataSource
 import com.example.android.architecture.blueprints.todoapp.data.source.TasksRepository
 import com.example.android.architecture.blueprints.todoapp.data.source.local.TasksLocalDataSource
@@ -45,7 +45,7 @@ object ServiceLocator {
     }
 
     private fun createTasksRepository(context: Context): TasksRepository {
-        return DefaultTasksRepository(FakeTasksRemoteDataSource, createTaskLocalDataSource(context))
+        return LocalTasksRepository(FakeTasksRemoteDataSource, createTaskLocalDataSource(context))
     }
 
     private fun createTaskLocalDataSource(context: Context): TasksDataSource {

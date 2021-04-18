@@ -34,7 +34,7 @@
     <string name="list_title">Task List</string>
     <string name="statistics_title">Statistics</string>
     <string name="statistics_no_tasks">You have no tasks.</string>
-    <string name="statistics_active_tasks">Number of positions: %d%%</string>
+    <string name="statistics_active_tasks">Number of positions: %d.</string>
     <string name="statistics_error">Error loading statistics.</string>
     <string name="no_data">No data</string>
     <string name="loading">LOADING</string>
