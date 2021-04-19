@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.architecture.blueprints.todoapp.data.source.remote
+package com.github.jim108dev.simple_task_count.data.source.remote
 
-import com.example.android.architecture.blueprints.todoapp.data.Result
-import com.example.android.architecture.blueprints.todoapp.data.Result.Error
-import com.example.android.architecture.blueprints.todoapp.data.Result.Success
-import com.example.android.architecture.blueprints.todoapp.data.Task
-import com.example.android.architecture.blueprints.todoapp.data.source.TasksDataSource
+import com.github.jim108dev.simple_task_count.data.Result
+import com.github.jim108dev.simple_task_count.data.Result.Error
+import com.github.jim108dev.simple_task_count.data.Result.Success
+import com.github.jim108dev.simple_task_count.data.Task
+import com.github.jim108dev.simple_task_count.data.source.TasksDataSource
 import kotlinx.coroutines.delay
 import java.util.Date
 
@@ -32,10 +32,6 @@ object TasksRemoteDataSource : TasksDataSource {
 
     private var TASKS_SERVICE_DATA = LinkedHashMap<String, Task>(2)
 
-    init {
-        addTask(Date(0),"Build tower in Pisa",10)
-        addTask(Date(0),"Finish bridge in Tacoma",20)
-    }
 
     override suspend fun getTasks(): Result<List<Task>> {
         // Simulate network by delaying the execution.
