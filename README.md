@@ -23,3 +23,4 @@ Open with Android Studio and run `simple-task-count/Tasks/verification/test`.
 - Navigation
 - Room
 - DatePicker Dialog
+- MVVM/ Clean Architecture
