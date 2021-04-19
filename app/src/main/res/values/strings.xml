@@ -34,7 +34,7 @@
     <string name="list_title">Task List</string>
     <string name="statistics_title">Statistics</string>
     <string name="statistics_no_tasks">You have no tasks.</string>
-    <string name="statistics_active_tasks">Number of positions: %d.</string>
+    <string name="statistics_active_tasks">Number of tasks: %d.</string>
     <string name="statistics_error">Error loading statistics.</string>
     <string name="no_data">No data</string>
     <string name="loading">LOADING</string>
@@ -53,7 +53,6 @@
     <string name="no_tasks_all">You have no tasks!</string>
     <string name="no_tasks_active">You have no active tasks!</string>
     <string name="no_tasks_completed">You have no completed tasks!</string>
-    <string name="refresh">Refresh</string>
     <string name="successfully_deleted_task_message">Task was deleted</string>
     <string name="successfully_added_task_message">Task added</string>
     <string name="no_data_description" />

@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2021 jim108dev
  * Copyright (C) 2019 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -170,59 +171,4 @@ class AppNavigationTest {
             .check(matches(isOpen(Gravity.START))) // Left drawer is open open.
     }
 
-    @Test
-    fun taskDetailScreen_doubleUIBackButton() {
-        val task = Task("UI <- button", "Description")
-        tasksRepository.saveTaskBlocking(task)
-
-        // start up Tasks screen
-        val activityScenario = ActivityScenario.launch(TasksActivity::class.java)
-        dataBindingIdlingResource.monitorActivity(activityScenario)
-
-        // Click on the task on the list
-        onView(withText("UI <- button")).perform(click())
-        // Click on the edit task button
-        onView(withId(R.id.edit_task_fab)).perform(click())
-
-        // Confirm that if we click "<-" once, we end up back at the task details page
-        onView(
-            withContentDescription(
-                activityScenario
-                    .getToolbarNavigationContentDescription()
-            )
-        ).perform(click())
-        onView(withId(R.id.task_detail_title_text)).check(matches(isDisplayed()))
-
-        // Confirm that if we click "<-" a second time, we end up back at the home screen
-        onView(
-            withContentDescription(
-                activityScenario
-                    .getToolbarNavigationContentDescription()
-            )
-        ).perform(click())
-        onView(withId(R.id.tasks_container_layout)).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun taskDetailScreen_doubleBackButton() {
-        val task = Task("Back button", "Description")
-        tasksRepository.saveTaskBlocking(task)
-
-        // start up Tasks screen
-        val activityScenario = ActivityScenario.launch(TasksActivity::class.java)
-        dataBindingIdlingResource.monitorActivity(activityScenario)
-
-        // Click on the task on the list
-        onView(withText("Back button")).perform(click())
-        // Click on the edit task button
-        onView(withId(R.id.edit_task_fab)).perform(click())
-
-        // Confirm that if we click back once, we end up back at the task details page
-        pressBack()
-        onView(withId(R.id.task_detail_title_text)).check(matches(isDisplayed()))
-
-        // Confirm that if we click back a second time, we end up back at the home screen
-        pressBack()
-        onView(withId(R.id.tasks_container_layout)).check(matches(isDisplayed()))
-    }
 }
