@@ -33,6 +33,7 @@ import com.github.jim108dev.simple_task_count.data.Task
 import com.github.jim108dev.simple_task_count.data.source.FakeRepository
 import com.github.jim108dev.simple_task_count.data.source.TasksRepository
 import com.github.jim108dev.simple_task_count.util.DataBindingIdlingResource
+import com.github.jim108dev.simple_task_count.util.DateUtil
 import com.github.jim108dev.simple_task_count.util.monitorFragment
 import com.github.jim108dev.simple_task_count.util.saveTaskBlocking
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -86,22 +87,17 @@ class StatisticsFragmentTest {
     fun tasks_showsNonEmptyMessage() {
         // Given some tasks
         repository.apply {
-            saveTaskBlocking(Task("Title1", "Description1", false))
-            saveTaskBlocking(Task("Title2", "Description2", true))
+            saveTaskBlocking(Task(DateUtil.convertStringToDate("02/01/21"),"title1", 15))
+
+            saveTaskBlocking(Task(DateUtil.convertStringToDate("02/01/21"),"title", 15))
         }
 
         val scenario = launchFragmentInContainer<StatisticsFragment>(Bundle(), R.style.AppTheme)
         dataBindingIdlingResource.monitorFragment(scenario)
 
         val expectedActiveTaskText = getApplicationContext<Context>()
-            .getString(R.string.statistics_active_tasks, 50.0f)
-        val expectedCompletedTaskText = getApplicationContext<Context>()
-            .getString(R.string.statistics_completed_tasks, 50.0f)
-        // check that both info boxes are displayed and contain the correct info
-        onView(withId(R.id.stats_active_text)).check(matches(isDisplayed()))
-        onView(withId(R.id.stats_active_text)).check(matches(withText(expectedActiveTaskText)))
-        onView(withId(R.id.stats_completed_text)).check(matches(isDisplayed()))
-        onView(withId(R.id.stats_completed_text))
-            .check(matches(withText(expectedCompletedTaskText)))
+            .getString(R.string.statistics_active_tasks, 2)
+        onView(withId(R.id.stats_num_tasks_text)).check(matches(isDisplayed()))
+        onView(withId(R.id.stats_num_tasks_text)).check(matches(withText(expectedActiveTaskText)))
     }
 }

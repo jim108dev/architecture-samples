@@ -46,7 +46,7 @@ class StatisticsViewModel(
     val empty: LiveData<Boolean> = _empty
 
     private val _numPositions = MutableLiveData<Int>()
-    val numPositions: LiveData<Int> = _numPositions
+    val numTasks: LiveData<Int> = _numPositions
 
     init {
         start()

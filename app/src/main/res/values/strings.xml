@@ -15,7 +15,7 @@
   -->
 
 <resources>
-    <string name="app_name">Journal</string>
+    <string name="app_name">Simple Task Count</string>
     <string name="add_task">New Task</string>
     <string name="edit_task">Edit Task</string>
     <string name="task_marked_complete">Task marked complete</string>
@@ -25,7 +25,7 @@
     <string name="menu_filter">Filter</string>
     <string name="menu_delete_all">Delete all</string>
     <string name="menu_delete_task">Delete task</string>
-    <string name="navigation_view_header_title">Simple Money Journal</string>
+    <string name="navigation_view_header_title">Simple Task Count</string>
     <string name="date_hint">Date</string>
     <string name="title_hint">Title</string>
     <string name="amount_hint">Amount</string>

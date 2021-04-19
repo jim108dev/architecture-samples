@@ -22,8 +22,10 @@ import com.github.jim108dev.simple_task_count.R.string
 import com.github.jim108dev.simple_task_count.assertSnackbarMessage
 import com.github.jim108dev.simple_task_count.data.Task
 import com.github.jim108dev.simple_task_count.data.source.FakeRepository
+import com.github.jim108dev.simple_task_count.domain.DeleteTaskUseCase
 import com.github.jim108dev.simple_task_count.domain.GetTaskUseCase
 import com.github.jim108dev.simple_task_count.domain.SaveTaskUseCase
+import com.github.jim108dev.simple_task_count.util.DateUtil
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
@@ -51,7 +53,8 @@ class AddEditTaskViewModelTest {
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
-    private val task = Task("Title1", "Description1")
+    private val task = Task(DateUtil.convertStringToDate("02/01/21"), "title", 15)
+
 
     @Before
     fun setupViewModel() {
@@ -60,26 +63,30 @@ class AddEditTaskViewModelTest {
 
         // Create class under test
         addEditTaskViewModel = AddEditTaskViewModel(
-            GetTaskUseCase(tasksRepository),
-            SaveTaskUseCase(tasksRepository)
+                DeleteTaskUseCase(tasksRepository),
+                GetTaskUseCase(tasksRepository),
+                SaveTaskUseCase(tasksRepository)
         )
     }
 
     @Test
     fun saveNewTaskToRepository_showsSuccessMessageUi() {
+        val newDate = DateUtil.convertStringToDate("02/01/21")
         val newTitle = "New Task Title"
-        val newDescription = "Some Task Description"
+        val newAmount = 15
         (addEditTaskViewModel).apply {
+            date.value = "02/01/21"
             title.value = newTitle
-            amount.value = newDescription
+            amount.value = "15"
         }
         addEditTaskViewModel.saveTask()
 
         val newTask = tasksRepository.tasksServiceData.values.first()
 
         // Then a task is saved in the repository and the view updated
+        assertThat(newTask.date).isEqualTo(newDate)
         assertThat(newTask.title).isEqualTo(newTitle)
-        assertThat(newTask.description).isEqualTo(newDescription)
+        assertThat(newTask.amount).isEqualTo(newAmount)
     }
 
     @Test
@@ -97,20 +104,6 @@ class AddEditTaskViewModelTest {
         mainCoroutineRule.resumeDispatcher()
 
         // Then progress indicator is hidden
-        assertThat(getValue(addEditTaskViewModel.dataLoading)).isFalse()
-    }
-
-    @Test
-    fun loadTasks_taskShown() {
-        // Add task to repository
-        tasksRepository.addTasks(task)
-
-        // Load the task with the viewmodel
-        addEditTaskViewModel.start(task.id)
-
-        // Verify a task is loaded
-        assertThat(getValue(addEditTaskViewModel.title)).isEqualTo(task.title)
-        assertThat(getValue(addEditTaskViewModel.amount)).isEqualTo(task.description)
         assertThat(getValue(addEditTaskViewModel.dataLoading)).isFalse()
     }
 

@@ -58,19 +58,6 @@
                     android:paddingTop="@dimen/activity_vertical_margin"
                     android:visibility="@{viewmodel.empty ? View.GONE : View.VISIBLE}">
 
-                    <!--
-                    <TextView
-                        jim108dev:id="@+id/filtering_text"
-                        jim108dev:layout_width="match_parent"
-                        jim108dev:layout_height="wrap_content"
-                        jim108dev:layout_marginLeft="@dimen/list_item_padding"
-                        jim108dev:layout_marginTop="@dimen/activity_vertical_margin"
-                        jim108dev:layout_marginRight="@dimen/list_item_padding"
-                        jim108dev:layout_marginBottom="@dimen/activity_vertical_margin"
-                        jim108dev:gravity="center_vertical"
-                        jim108dev:text="@{context.getString(viewmodel.currentFilteringLabel)}"
-                        jim108dev:textAppearance="@style/TextAppearance.AppCompat.Title" />
--->
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/tasks_list"
                         android:layout_width="match_parent"

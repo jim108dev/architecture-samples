@@ -49,7 +49,7 @@
                 android:visibility="@{viewmodel.dataLoading ? View.GONE : View.VISIBLE}">
 
                 <TextView
-                    android:id="@+id/add_position_date"
+                    android:id="@+id/add_task_date_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -61,7 +61,7 @@
                     />
 
                 <EditText
-                    android:id="@+id/add_task_title_edit_text"
+                    android:id="@+id/add_task_title_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
@@ -72,7 +72,7 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                 <EditText
-                    android:id="@+id/add_position_amount_edit_text"
+                    android:id="@+id/add_task_amount_text"
                     android:layout_width="0dp"
                     android:gravity="end"
                     android:layout_height="wrap_content"

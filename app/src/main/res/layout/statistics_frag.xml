@@ -56,11 +56,11 @@
                     android:visibility="@{viewmodel.empty ? View.VISIBLE : View.GONE}" />
 
                 <TextView
-                    android:id="@+id/stats_active_text"
+                    android:id="@+id/stats_num_tasks_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="1dp"
-                    android:text="@{@string/statistics_active_tasks(viewmodel.numPositions)}"
+                    android:text="@{@string/statistics_active_tasks(viewmodel.numTasks)}"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:visibility="@{viewmodel.empty ? View.GONE : View.VISIBLE}" />
 

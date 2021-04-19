@@ -56,31 +56,6 @@ class FakeRepository : TasksRepository {
         tasksServiceData[task.id] = task
     }
 
-    override suspend fun completeTask(task: Task) {
-        val completedTask = Task(task.title, task.description, true, task.id)
-        tasksServiceData[task.id] = completedTask
-    }
-
-    override suspend fun completeTask(taskId: String) {
-        // Not required for the remote data source.
-        throw NotImplementedError()
-    }
-
-    override suspend fun activateTask(task: Task) {
-        val activeTask = Task(task.title, task.description, false, task.id)
-        tasksServiceData[task.id] = activeTask
-    }
-
-    override suspend fun activateTask(taskId: String) {
-        throw NotImplementedError()
-    }
-
-    override suspend fun clearCompletedTasks() {
-        tasksServiceData = tasksServiceData.filterValues {
-            !it.isCompleted
-        } as LinkedHashMap<String, Task>
-    }
-
     override suspend fun deleteTask(taskId: String) {
         tasksServiceData.remove(taskId)
     }

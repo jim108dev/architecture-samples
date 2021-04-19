@@ -42,6 +42,7 @@ import com.github.jim108dev.simple_task_count.ServiceLocator
 import com.github.jim108dev.simple_task_count.data.Task
 import com.github.jim108dev.simple_task_count.data.source.FakeRepository
 import com.github.jim108dev.simple_task_count.data.source.TasksRepository
+import com.github.jim108dev.simple_task_count.util.DateUtil
 import com.github.jim108dev.simple_task_count.util.saveTaskBlocking
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
@@ -84,196 +85,13 @@ class TasksFragmentTest {
     @Test
     fun displayTask_whenRepositoryHasData() {
         // GIVEN - One task already in the repository
-        repository.saveTaskBlocking(Task("TITLE1", "DESCRIPTION1"))
+        repository.saveTaskBlocking(Task(DateUtil.convertStringToDate("02/01/21"),"title", 15))
 
         // WHEN - On startup
         launchActivity()
 
         // THEN - Verify task is displayed on screen
-        onView(withText("TITLE1")).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun displayActiveTask() {
-        repository.saveTaskBlocking(Task("TITLE1", "DESCRIPTION1"))
-
-        launchActivity()
-
-        onView(withText("TITLE1")).check(matches(isDisplayed()))
-
-        onView(withId(R.id.menu_filter)).perform(click())
-        onView(withText(R.string.nav_active)).perform(click())
-        onView(withText("TITLE1")).check(matches(isDisplayed()))
-
-        onView(withId(R.id.menu_filter)).perform(click())
-        onView(withText(R.string.nav_completed)).perform(click())
-        onView(withText("TITLE1")).check(matches(not(isDisplayed())))
-    }
-
-    @Test
-    fun displayCompletedTask() {
-        repository.saveTaskBlocking(Task("TITLE1", "DESCRIPTION1", true))
-
-        launchActivity()
-
-        onView(withText("TITLE1")).check(matches(isDisplayed()))
-
-        onView(withId(R.id.menu_filter)).perform(click())
-        onView(withText(R.string.nav_active)).perform(click())
-        onView(withText("TITLE1")).check(matches(not(isDisplayed())))
-
-        onView(withId(R.id.menu_filter)).perform(click())
-        onView(withText(R.string.nav_completed)).perform(click())
-        onView(withText("TITLE1")).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun deleteOneTask() {
-        repository.saveTaskBlocking(Task("TITLE1", "DESCRIPTION1"))
-
-        launchActivity()
-
-        // Open it in details view
-        onView(withText("TITLE1")).perform(click())
-
-        // Click delete task in menu
-        onView(withId(R.id.menu_delete)).perform(click())
-
-        // Verify it was deleted
-        onView(withId(R.id.menu_filter)).perform(click())
-        onView(withText(R.string.nav_all)).perform(click())
-        onView(withText("TITLE1")).check(doesNotExist())
-    }
-
-    @Test
-    fun deleteOneOfTwoTasks() {
-        repository.saveTaskBlocking(Task("TITLE1", "DESCRIPTION1"))
-        repository.saveTaskBlocking(Task("TITLE2", "DESCRIPTION2"))
-
-        launchActivity()
-
-        // Open it in details view
-        onView(withText("TITLE1")).perform(click())
-
-        // Click delete task in menu
-        onView(withId(R.id.menu_delete)).perform(click())
-
-        // Verify it was deleted
-        onView(withId(R.id.menu_filter)).perform(click())
-        onView(withText(R.string.nav_all)).perform(click())
-        onView(withText("TITLE1")).check(doesNotExist())
-        // but not the other one
-        onView(withText("TITLE2")).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun markTaskAsComplete() {
-        repository.saveTaskBlocking(Task("TITLE1", "DESCRIPTION1"))
-
-        launchActivity()
-
-        // Mark the task as complete
-        onView(checkboxWithText("TITLE1")).perform(click())
-
-        // Verify task is shown as complete
-        onView(withId(R.id.menu_filter)).perform(click())
-        onView(withText(R.string.nav_all)).perform(click())
-        onView(withText("TITLE1")).check(matches(isDisplayed()))
-        onView(withId(R.id.menu_filter)).perform(click())
-        onView(withText(R.string.nav_active)).perform(click())
-        onView(withText("TITLE1")).check(matches(not(isDisplayed())))
-        onView(withId(R.id.menu_filter)).perform(click())
-        onView(withText(R.string.nav_completed)).perform(click())
-        onView(withText("TITLE1")).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun markTaskAsActive() {
-        repository.saveTaskBlocking(Task("TITLE1", "DESCRIPTION1", true))
-
-        launchActivity()
-
-        // Mark the task as active
-        onView(checkboxWithText("TITLE1")).perform(click())
-
-        // Verify task is shown as active
-        onView(withId(R.id.menu_filter)).perform(click())
-        onView(withText(R.string.nav_all)).perform(click())
-        onView(withText("TITLE1")).check(matches(isDisplayed()))
-        onView(withId(R.id.menu_filter)).perform(click())
-        onView(withText(R.string.nav_active)).perform(click())
-        onView(withText("TITLE1")).check(matches(isDisplayed()))
-        onView(withId(R.id.menu_filter)).perform(click())
-        onView(withText(R.string.nav_completed)).perform(click())
-        onView(withText("TITLE1")).check(matches(not(isDisplayed())))
-    }
-
-    @Test
-    fun showAllTasks() {
-        // Add one active task and one completed task
-        repository.saveTaskBlocking(Task("TITLE1", "DESCRIPTION1"))
-        repository.saveTaskBlocking(Task("TITLE2", "DESCRIPTION2", true))
-
-        launchActivity()
-
-        // Verify that both of our tasks are shown
-        onView(withId(R.id.menu_filter)).perform(click())
-        onView(withText(R.string.nav_all)).perform(click())
-        onView(withText("TITLE1")).check(matches(isDisplayed()))
-        onView(withText("TITLE2")).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun showActiveTasks() {
-        // Add 2 active tasks and one completed task
-        repository.saveTaskBlocking(Task("TITLE1", "DESCRIPTION1"))
-        repository.saveTaskBlocking(Task("TITLE2", "DESCRIPTION2"))
-        repository.saveTaskBlocking(Task("TITLE3", "DESCRIPTION3", true))
-
-        launchActivity()
-
-        // Verify that the active tasks (but not the completed task) are shown
-        onView(withId(R.id.menu_filter)).perform(click())
-        onView(withText(R.string.nav_active)).perform(click())
-        onView(withText("TITLE1")).check(matches(isDisplayed()))
-        onView(withText("TITLE2")).check(matches(isDisplayed()))
-        onView(withText("TITLE3")).check(doesNotExist())
-    }
-
-    @Test
-    fun showCompletedTasks() {
-        // Add one active task and 2 completed tasks
-        repository.saveTaskBlocking(Task("TITLE1", "DESCRIPTION1"))
-        repository.saveTaskBlocking(Task("TITLE2", "DESCRIPTION2", true))
-        repository.saveTaskBlocking(Task("TITLE3", "DESCRIPTION3", true))
-
-        launchActivity()
-
-        // Verify that the completed tasks (but not the active task) are shown
-        onView(withId(R.id.menu_filter)).perform(click())
-        onView(withText(R.string.nav_completed)).perform(click())
-        onView(withText("TITLE1")).check(doesNotExist())
-        onView(withText("TITLE2")).check(matches(isDisplayed()))
-        onView(withText("TITLE3")).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun clearCompletedTasks() {
-        // Add one active task and one completed task
-        repository.saveTaskBlocking(Task("TITLE1", "DESCRIPTION1"))
-        repository.saveTaskBlocking(Task("TITLE2", "DESCRIPTION2", true))
-
-        launchActivity()
-
-        // Click clear completed in menu
-        openActionBarOverflowOrOptionsMenu(getApplicationContext())
-        onView(withText(R.string.menu_clear)).perform(click())
-
-        onView(withId(R.id.menu_filter)).perform(click())
-        onView(withText(R.string.nav_all)).perform(click())
-        // Verify that only the active task is shown
-        onView(withText("TITLE1")).check(matches(isDisplayed()))
-        onView(withText("TITLE2")).check(doesNotExist())
+        onView(withText("title")).check(matches(isDisplayed()))
     }
 
     @Test
@@ -285,28 +103,6 @@ class TasksFragmentTest {
 
         // Verify the "You have no tasks!" text is shown
         onView(withText("You have no tasks!")).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun noTasks_CompletedTasksFilter_AddTaskViewNotVisible() {
-        launchActivity()
-
-        onView(withId(R.id.menu_filter)).perform(click())
-        onView(withText(R.string.nav_completed)).perform(click())
-
-        // Verify the "You have no completed tasks!" text is shown
-        onView(withText("You have no completed tasks!")).check(matches((isDisplayed())))
-    }
-
-    @Test
-    fun noTasks_ActiveTasksFilter_AddTaskViewNotVisible() {
-        launchActivity()
-
-        onView(withId(R.id.menu_filter)).perform(click())
-        onView(withText(R.string.nav_active)).perform(click())
-
-        // Verify the "You have no active tasks!" text is shown
-        onView(withText("You have no active tasks!")).check(matches((isDisplayed())))
     }
 
     @Test
@@ -338,7 +134,4 @@ class TasksFragmentTest {
         return activityScenario
     }
 
-    private fun checkboxWithText(text: String): Matcher<View> {
-        return allOf(withId(R.id.complete_checkbox), hasSibling(withText(text)))
-    }
 }

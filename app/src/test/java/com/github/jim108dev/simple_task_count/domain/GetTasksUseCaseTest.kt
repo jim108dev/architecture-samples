@@ -6,6 +6,7 @@ import com.github.jim108dev.simple_task_count.data.Task
 import com.github.jim108dev.simple_task_count.data.source.FakeRepository
 import com.github.jim108dev.simple_task_count.tasks.TasksFilterType.DEBIT
 import com.github.jim108dev.simple_task_count.tasks.TasksFilterType.CREDIT
+import com.github.jim108dev.simple_task_count.util.DateUtil
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.assertEquals
@@ -50,9 +51,9 @@ class GetTasksUseCaseTest {
     fun loadTasks_noFilter() = runBlockingTest {
         // Given a repository with 1 active and 2 completed tasks:
         tasksRepository.addTasks(
-            Task("title", "desc", false),
-            Task("title", "desc", true),
-            Task("title", "desc", true)
+                Task(DateUtil.convertStringToDate("02/01/21"), "title", 10),
+                Task(DateUtil.convertStringToDate("02/01/21"), "title", 20),
+                Task(DateUtil.convertStringToDate("02/01/21"), "title", -5)
         )
 
         // Load tasks
@@ -64,12 +65,12 @@ class GetTasksUseCaseTest {
     }
 
     @Test
-    fun loadTasks_completedFilter() = runBlockingTest{
+    fun loadTasks_completedFilter() = runBlockingTest {
         // Given a repository with 1 active and 2 completed tasks:
         tasksRepository.addTasks(
-            Task("title", "desc", false),
-            Task("title", "desc", true),
-            Task("title", "desc", true)
+                Task(DateUtil.convertStringToDate("02/01/21"), "title", 10),
+                Task(DateUtil.convertStringToDate("02/01/21"), "title", 20),
+                Task(DateUtil.convertStringToDate("02/01/21"), "title", -5)
         )
 
         // Load tasks
@@ -77,16 +78,16 @@ class GetTasksUseCaseTest {
 
         // Verify the result is filtered correctly
         assertTrue(result is Success)
-        assertEquals((result as Success).data.size, 2)
+        assertEquals((result as Success).data.size, 1)
     }
 
     @Test
-    fun loadTasks_activeFilter() = runBlockingTest{
+    fun loadTasks_activeFilter() = runBlockingTest {
         // Given a repository with 1 active and 2 completed tasks:
         tasksRepository.addTasks(
-            Task("title", "desc", false),
-            Task("title", "desc", true),
-            Task("title", "desc", true)
+                Task(DateUtil.convertStringToDate("02/01/21"), "title", 10),
+                Task(DateUtil.convertStringToDate("02/01/21"), "title", 20),
+                Task(DateUtil.convertStringToDate("02/01/21"), "title", -5)
         )
 
         // Load tasks
@@ -94,6 +95,6 @@ class GetTasksUseCaseTest {
 
         // Verify the result is filtered correctly
         assertTrue(result is Success)
-        assertEquals((result as Success).data.size, 1)
+        assertEquals((result as Success).data.size, 2)
     }
 }

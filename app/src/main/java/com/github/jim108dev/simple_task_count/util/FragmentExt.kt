@@ -20,10 +20,10 @@ package com.github.jim108dev.simple_task_count.util
  */
 
 import androidx.fragment.app.Fragment
-import com.github.jim108dev.simple_task_count.TodoApplication
+import com.github.jim108dev.simple_task_count.MainApplication
 import com.github.jim108dev.simple_task_count.ViewModelFactory
 
 fun Fragment.getViewModelFactory(): ViewModelFactory {
-    val repository = (requireContext().applicationContext as TodoApplication).taskRepository
+    val repository = (requireContext().applicationContext as MainApplication).taskRepository
     return ViewModelFactory(repository)
 }

@@ -70,7 +70,7 @@ class AddEditTaskFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         openPicker()
-        add_position_date.setOnClickListener{
+        add_task_date_text.setOnClickListener{
             openPicker()
         }
         super.onViewCreated(view, savedInstanceState)
@@ -112,7 +112,7 @@ class AddEditTaskFragment : Fragment() {
             cal.set(Calendar.MONTH, monthOfYear)
             cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
-            add_position_date.text = DateUtil.convertDateToString(cal.time)
+            add_task_date_text.text = DateUtil.convertDateToString(cal.time)
         }
 
         DatePickerDialog(requireContext(), date, cal
