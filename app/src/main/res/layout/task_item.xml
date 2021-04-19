@@ -23,11 +23,11 @@
 
         <variable
             name="task"
-            type="com.example.android.architecture.blueprints.todoapp.data.Task" />
+            type="com.github.jim108dev.simple_task_count.data.Task" />
 
         <variable
             name="viewmodel"
-            type="com.example.android.architecture.blueprints.todoapp.tasks.TasksViewModel" />
+            type="com.github.jim108dev.simple_task_count.tasks.TasksViewModel" />
     </data>
 
     <LinearLayout

@@ -22,10 +22,10 @@
 
         <variable
             name="viewmodel"
-            type="com.example.android.architecture.blueprints.todoapp.statistics.StatisticsViewModel" />
+            type="com.github.jim108dev.simple_task_count.statistics.StatisticsViewModel" />
     </data>
 
-    <com.example.android.architecture.blueprints.todoapp.ScrollChildSwipeRefreshLayout
+    <com.github.jim108dev.simple_task_count.ScrollChildSwipeRefreshLayout
         android:id="@+id/refresh_layout"
         app:refreshing="@{viewmodel.dataLoading}"
         app:onRefreshListener="@{viewmodel::refresh}"
@@ -67,5 +67,5 @@
             </LinearLayout>
         </LinearLayout>
 
-    </com.example.android.architecture.blueprints.todoapp.ScrollChildSwipeRefreshLayout>
+    </com.github.jim108dev.simple_task_count.ScrollChildSwipeRefreshLayout>
 </layout>

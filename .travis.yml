@@ -1,11 +1,11 @@
-language: android
+language: jim108dev
 android:
   components:
   - tools
   - platform-tools
   - build-tools-28.0.3
-  - android-28
-  - extra-android-m2repository
+  - jim108dev-28
+  - extra-jim108dev-m2repository
   - extra-google-m2repository
 jdk:
 - oraclejdk8

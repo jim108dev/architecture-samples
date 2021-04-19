@@ -16,17 +16,17 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.android.architecture.blueprints.todoapp">
+    package="com.github.jim108dev.simple_task_count">
 
     <application
         android:allowBackup="false"
-        android:name=".TodoApplication"
+        android:name="com.github.jim108dev.simple_task_count.TodoApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.example.android.architecture.blueprints.todoapp.tasks.TasksActivity"
+            android:name="com.github.jim108dev.simple_task_count.tasks.TasksActivity"
             android:windowSoftInputMode="adjustResize"
             android:theme="@style/AppTheme.OverlapSystemBar">
             <intent-filter>

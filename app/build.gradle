@@ -8,7 +8,7 @@ android {
     compileSdkVersion rootProject.compileSdkVersion
 
     defaultConfig {
-        applicationId "com.example.android.architecture.blueprints.usecases"
+        applicationId "com.github.jim108dev.simple_task_count"
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
